@@ -7,10 +7,8 @@ DIGIT       [0-9]
 LETTER      [a-zA-Z_]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 NUMBER      {DIGIT}+
-WHITESPACE  [ \t\r\n]+
-STRING_LITERAL   \"([^\\\"]|\\.)*\"
-COMMENT     "//".*
-MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
+STRING_LITERAL   (\"([^\\\"]|\\.)*\")|(\'([^\\\']|\\.)*\') 
+/* ajouter les commentaires single line et multi */
 %%
 
 "abstract"     { return ABSTRACT; }
@@ -36,7 +34,6 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "for"          { return FOR; }
 "if"           { return IF; }
 "implements"   { return IMPLEMENTS; }
-"import"       { return IMPORT; }
 "instanceof"   { return INSTANCEOF; }
 "int"          { return INT; }
 "interface"    { return INTERFACE; }
@@ -97,17 +94,18 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "System"               { return SYSTEM; }
 "out"                  { return OUT; }
 "println"              { return PRINTLN; }
+"\n"                   { nb_ligne ++; }
+[ \t]           { /* Ignorer les espaces */ }
 {IDENTIFIER}           { return IDENT; }
 {NUMBER}               { return NUM; }
-{COMMENT}              { /* Ignorer les commentaires */ }
-{MULTILINE_COMMENT}    { /* Ignorer les commentaires */ }
+/* {COMMENT}              {  }
+{MULTILINE_COMMENT}    {  } */
 {STRING_LITERAL}       { return STRING_LITERAL; }
-{WHITESPACE}           { /* Ignorer les espaces */ }
 
 . { printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext); }
 
 %%
-"!"   { return NOT; }
+eturn NOT; }
 "+"   { return PLUS; }
 "-"   { return MINUS; }
 "*"   { return MULTIPLY; }
@@ -135,4 +133,4 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 {NUMBER}               { return NUM; }
 {COMMENT}              { /* Ignorer les commentaires */ }
 {MULTILINE_COMMENT}    { /* Ignorer les commentaires */ }
-{STRING_LITERAL}       { return STRING_LITERAL; }
+{STRING_LITERAL}       { return STRING_LITER
