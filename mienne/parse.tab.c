@@ -73,13 +73,16 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "ts.h"
+    elt_idf_cst ts_idf_cst[1000];
+    elt_kw_sep ts_kw[50], ts_sep[50];
+    int count_idf_cst = 0, count_kw = 0, count_sep = 0;
     extern char *yytext;  // Dernier token lu par Flex
 
     int nb_ligne = 1;
 
 
 /* Line 189 of yacc.c  */
-#line 83 "parse.tab.c"
+#line 86 "parse.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -166,7 +169,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 10 "parse.y"
+#line 13 "parse.y"
 
 int integer;
 char* str;
@@ -174,7 +177,7 @@ char* str;
 
 
 /* Line 214 of yacc.c  */
-#line 178 "parse.tab.c"
+#line 181 "parse.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -186,7 +189,7 @@ char* str;
 
 
 /* Line 264 of yacc.c  */
-#line 190 "parse.tab.c"
+#line 193 "parse.tab.c"
 
 #ifdef short
 # undef short
@@ -517,17 +520,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    45,    45,    49,    49,    55,    59,    60,    61,    61,
-      65,    65,    68,    70,    74,    75,    79,    81,    82,    83,
-      87,    91,    95,    98,   100,   104,   126,   128,   132,   132,
-     136,   140,   140,   140,   140,   144,   145,   150,   151,   160,
-     161,   165,   166,   170,   170,   174,   175,   176,   177,   182,
-     184,   185,   191,   196,   197,   201,   201,   205,   206,   210,
-     212,   216,   216,   253,   254,   255,   256,   257,   258,   259,
-     260,   261,   262,   263,   264,   265,   266,   267,   272,   273,
-     274,   275,   276,   280,   280,   280,   284,   284,   284,   284,
-     284,   284,   284,   284,   284,   288,   289,   293,   299,   300,
-     304,   305,   306,   310,   311,   315,   316,   320,   324,   325
+       0,    48,    48,    52,    52,    58,    62,    63,    64,    64,
+      68,    68,    71,    73,    77,    78,    82,    84,    85,    86,
+      90,    94,    98,   101,   103,   107,   129,   131,   135,   135,
+     139,   143,   143,   143,   143,   147,   148,   153,   154,   163,
+     164,   168,   169,   173,   173,   177,   178,   179,   180,   185,
+     187,   188,   194,   199,   200,   204,   204,   208,   209,   213,
+     215,   219,   219,   256,   257,   258,   259,   260,   261,   262,
+     263,   264,   265,   266,   267,   268,   269,   270,   275,   276,
+     277,   278,   279,   283,   283,   283,   287,   287,   287,   287,
+     287,   287,   287,   287,   287,   291,   292,   296,   302,   303,
+     307,   308,   309,   313,   314,   318,   319,   323,   327,   328
 };
 #endif
 
@@ -1603,7 +1606,7 @@ yyreduce:
       
 
 /* Line 1455 of yacc.c  */
-#line 1607 "parse.tab.c"
+#line 1610 "parse.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1815,7 +1818,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 328 "parse.y"
+#line 331 "parse.y"
 
 
 int main() {

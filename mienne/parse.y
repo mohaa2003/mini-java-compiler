@@ -2,6 +2,9 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "ts.h"
+    elt_idf_cst ts_idf_cst[1000];
+    elt_kw_sep ts_kw[50], ts_sep[50];
+    int count_idf_cst = 0, count_kw = 0, count_sep = 0;
     extern char *yytext;  // Dernier token lu par Flex
 
     int nb_ligne = 1;

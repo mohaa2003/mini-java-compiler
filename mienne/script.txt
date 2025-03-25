@@ -7,7 +7,7 @@ class C {
     int [] N = {(2*3-4),"chlada"};
     int x,y,z=2;
     final int a=5,b=16;
-    K(int a,short b , kaka c){
+    constructeur(int a,short b , kaka c){
         this.a = 5*2/3;
     }
     {
