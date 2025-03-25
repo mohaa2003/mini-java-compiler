@@ -30,8 +30,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "String"       { return STRING; }
 "new"          { return NEW; }
 "this"         { return THIS; }
-"self"         { return SELF; }
-"return"       { return RETURN; }
+"self"         { return SELF; } /* "return"       { return RETURN; } */
 "void"       { return VOID; }
 
 "="   { return ASSIGN; }
@@ -69,5 +68,6 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 {MULTILINE_COMMENT}    { /* Ignorer les commentaires multilignes */ }
 {STRING_LITERAL}       { return STRING_LITERAL; }
 
-. { printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext); }
+. { printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
+return ERR; }
 

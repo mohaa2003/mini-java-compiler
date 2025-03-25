@@ -2,6 +2,8 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "ts.h"
+    extern char *yytext;  // Dernier token lu par Flex
+
     int nb_ligne = 1;
 %}
 
@@ -9,6 +11,8 @@
 int integer;
 char* str;
 }
+
+
 
 /* Déclaration des tokens (correspond à lex.l) */
 %token BOOLEAN CHAR CLASS
@@ -20,6 +24,8 @@ char* str;
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET SEMICOLON COMMA DOT
 %token IDENT NUM
 %token SYSTEM OUT PRINTLN
+%token ERR
+%start program
 
 /* %left ELSE */
 %left ASSIGN
@@ -31,13 +37,18 @@ char* str;
 %left MULTIPLY DIVIDE MOD
 %right NOT
 %right UMINUS
+/* %right LBRACE RBRACE  // Priorité à droite pour les accolades */
 %%
 /* si je decide de remettre list_import je dois mettre un nouveau axiome (program) */
 
+program:
+    class_declaration_list
+;
+
 class_declaration_list:
     class_declaration | class_declaration_list class_declaration
-    {printf("Syntaxe correcte !\n");
-    YYACCEPT;}
+    /* {printf("Syntaxe correcte !\n");
+    YYACCEPT;} */
     ;
 
 class_declaration:
@@ -56,17 +67,20 @@ class_type:
 
 class_body:
     /* Vide */
-    | core_body
+    | core_body_sequence  // Changé: permet une séquence de core_body
+    ;
+
+core_body_sequence:
+    core_body
+    | core_body_sequence core_body  // Permet plusieurs éléments consécutifs
     ;
 
 core_body:
-    statement | /*method_declaration |*/ constructor_declaration
-    | LBRACE core_body_list RBRACE
-    ;
-
-core_body_list:
-    /* Vide */
-    | core_body_list core_body
+    statement
+    /*method_declaration |*/
+    | constructor_declaration
+    | LBRACE RBRACE  // Accepte {} seul
+    | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu
     ;
 
 instanciation:
@@ -123,7 +137,7 @@ param_def:
     ;
 
 assignment:
-    IDENT ASSIGN expression | IDENT ASSIGN method_call | array_access ASSIGN expression
+    IDENT ASSIGN expression | IDENT ASSIGN array_access | IDENT ASSIGN method_call | array_access ASSIGN expression
     ;
 
 variables_declaration:
@@ -148,8 +162,8 @@ variables_init:
     ;
 
 constantes_init:
-    constantes_init COMMA ASSIGN
-    | ASSIGN
+    constantes_init COMMA assignment
+    | assignment
 ;
 
 variable_init:
@@ -303,7 +317,7 @@ array_elements:
     ;
 
 array_access:
-    IDENT array_indices 
+    IDENT array_indices
     ;
 
 array_indices:
@@ -313,14 +327,18 @@ array_indices:
 
 %%
 
-int main ()
-{
-yyparse();
-return 0;
+int main() {
+    if (yyparse() == 0) {
+        printf("Syntaxe correcte !\n");
+    }
+    return 0;
 }
 int yywrap()
-{return 1;}
+{
+    return 1;
+}
 int yyerror(char *msg)
-{ printf("syntaxic error");
-return 1;
+{ 
+    printf("Erreur syntaxique à la ligne %d : %s\n", nb_ligne,yytext);
+    exit(1);
 }

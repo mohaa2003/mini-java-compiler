@@ -1,2589 +1,2728 @@
+Terminals unused in grammar
+
+   ERR
+
+
 Grammar
 
-    0 $accept: class_declaration_list $end
+    0 $accept: program $end
 
-    1 class_declaration_list: class_declaration
-    2                       | class_declaration_list class_declaration
+    1 program: class_declaration_list
 
-    3 class_declaration: modificator class_type CLASS IDENT LBRACE class_body RBRACE
+    2 class_declaration_list: class_declaration
+    3                       | class_declaration_list class_declaration
 
-    4 modificator: PRIVATE
-    5            | PUBLIC
-    6            | PROTECTED
-    7            | /* empty */
+    4 class_declaration: modificator class_type CLASS IDENT LBRACE class_body RBRACE
 
-    8 class_type: STATIC
-    9           | /* empty */
+    5 modificator: PRIVATE
+    6            | PUBLIC
+    7            | PROTECTED
+    8            | /* empty */
 
-   10 class_body: /* empty */
-   11           | core_body
+    9 class_type: STATIC
+   10           | /* empty */
 
-   12 core_body: statement
-   13          | constructor_declaration
-   14          | LBRACE core_body_list RBRACE
+   11 class_body: /* empty */
+   12           | core_body_sequence
 
-   15 core_body_list: /* empty */
-   16               | core_body_list core_body
+   13 core_body_sequence: core_body
+   14                   | core_body_sequence core_body
 
-   17 instanciation: type_abstract IDENT ASSIGN creation_object SEMICOLON
+   15 core_body: statement
+   16          | constructor_declaration
+   17          | LBRACE RBRACE
+   18          | LBRACE core_body_sequence RBRACE
 
-   18 creation_object: NEW IDENT LPAREN args RPAREN
+   19 instanciation: type_abstract IDENT ASSIGN creation_object SEMICOLON
 
-   19 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body RBRACE
+   20 creation_object: NEW IDENT LPAREN args RPAREN
 
-   20 constructor_body: /* empty */
-   21                 | constructor_body constructor_assignment SEMICOLON
+   21 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body RBRACE
 
-   22 constructor_assignment: THIS DOT IDENT ASSIGN expression
+   22 constructor_body: /* empty */
+   23                 | constructor_body constructor_assignment SEMICOLON
 
-   23 params: /* empty */
-   24       | param_list
+   24 constructor_assignment: THIS DOT IDENT ASSIGN expression
 
-   25 param_list: param_def
-   26           | param_list COMMA param_def
+   25 params: /* empty */
+   26       | param_list
 
-   27 param_def: types IDENT
+   27 param_list: param_def
+   28           | param_list COMMA param_def
 
-   28 assignment: IDENT ASSIGN expression
-   29           | IDENT ASSIGN method_call
-   30           | array_access ASSIGN expression
+   29 param_def: types IDENT
 
-   31 variables_declaration: type_abstract variables_init SEMICOLON
-   32                      | premitive_type variables_init SEMICOLON
+   30 assignment: IDENT ASSIGN expression
+   31           | IDENT ASSIGN array_access
+   32           | IDENT ASSIGN method_call
+   33           | array_access ASSIGN expression
 
-   33 constantes_declaration: FINAL type_abstract constantes_init SEMICOLON
-   34                       | FINAL premitive_type constantes_init SEMICOLON
+   34 variables_declaration: type_abstract variables_init SEMICOLON
+   35                      | premitive_type variables_init SEMICOLON
 
-   35 variables_init: variables_init COMMA variable_init
-   36               | variable_init
+   36 constantes_declaration: FINAL type_abstract constantes_init SEMICOLON
+   37                       | FINAL premitive_type constantes_init SEMICOLON
 
-   37 constantes_init: constantes_init COMMA ASSIGN
-   38                | ASSIGN
+   38 variables_init: variables_init COMMA variable_init
+   39               | variable_init
 
-   39 variable_init: IDENT
-   40              | assignment
+   40 constantes_init: constantes_init COMMA assignment
+   41                | assignment
 
-   41 statement: assignment SEMICOLON
-   42          | array_declaration
-   43          | variables_declaration
-   44          | constantes_declaration
-   45          | print_statement SEMICOLON
-   46          | method_call SEMICOLON
-   47          | instanciation
+   42 variable_init: IDENT
+   43              | assignment
 
-   48 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression RPAREN
+   44 statement: assignment SEMICOLON
+   45          | array_declaration
+   46          | variables_declaration
+   47          | constantes_declaration
+   48          | print_statement SEMICOLON
+   49          | method_call SEMICOLON
+   50          | instanciation
 
-   49 sufix_methode_list: IDENT DOT IDENT
-   50                   | sufix_methode_list DOT IDENT
+   51 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression RPAREN
 
-   51 method_prefix: THIS
-   52              | SELF
+   52 sufix_methode_list: IDENT DOT IDENT
+   53                   | sufix_methode_list DOT IDENT
 
-   53 method_call: sufix_methode_list LPAREN args RPAREN
-   54            | method_prefix DOT IDENT LPAREN args RPAREN
+   54 method_prefix: THIS
+   55              | SELF
 
-   55 args: /* empty */
-   56     | arg_list
+   56 method_call: sufix_methode_list LPAREN args RPAREN
+   57            | method_prefix DOT IDENT LPAREN args RPAREN
 
-   57 arg_list: expression
-   58         | arg_list COMMA expression
+   58 args: /* empty */
+   59     | arg_list
 
-   59 expression: expression PLUS simple_expression
-   60           | expression MINUS simple_expression
-   61           | expression MULTIPLY simple_expression
-   62           | expression DIVIDE simple_expression
-   63           | expression MOD simple_expression
-   64           | expression EQ simple_expression
-   65           | expression NEQ simple_expression
-   66           | expression LT simple_expression
-   67           | expression GT simple_expression
-   68           | expression LTE simple_expression
-   69           | expression GTE simple_expression
-   70           | expression AND simple_expression
-   71           | expression OR simple_expression
-   72           | MINUS expression
-   73           | simple_expression
+   60 arg_list: expression
+   61         | arg_list COMMA expression
 
-   74 simple_expression: NOT simple_expression
-   75                  | LPAREN expression RPAREN
-   76                  | IDENT
-   77                  | NUM
-   78                  | STRING_LITERAL
+   62 expression: expression PLUS simple_expression
+   63           | expression MINUS simple_expression
+   64           | expression MULTIPLY simple_expression
+   65           | expression DIVIDE simple_expression
+   66           | expression MOD simple_expression
+   67           | expression EQ simple_expression
+   68           | expression NEQ simple_expression
+   69           | expression LT simple_expression
+   70           | expression GT simple_expression
+   71           | expression LTE simple_expression
+   72           | expression GTE simple_expression
+   73           | expression AND simple_expression
+   74           | expression OR simple_expression
+   75           | MINUS expression
+   76           | simple_expression
 
-   79 types: premitive_type
-   80      | type_abstract
-   81      | array_type
+   77 simple_expression: NOT simple_expression
+   78                  | LPAREN expression RPAREN
+   79                  | IDENT
+   80                  | NUM
+   81                  | STRING_LITERAL
 
-   82 premitive_type: INT
-   83               | FLOAT
-   84               | BOOLEAN
-   85               | CHAR
-   86               | DOUBLE
-   87               | VOID
-   88               | STRING
-   89               | LONG
-   90               | SHORT
+   82 types: premitive_type
+   83      | type_abstract
+   84      | array_type
 
-   91 array_type: premitive_type LBRACKET RBRACKET
-   92           | IDENT LBRACKET RBRACKET
+   85 premitive_type: INT
+   86               | FLOAT
+   87               | BOOLEAN
+   88               | CHAR
+   89               | DOUBLE
+   90               | VOID
+   91               | STRING
+   92               | LONG
+   93               | SHORT
 
-   93 type_abstract: IDENT
+   94 array_type: premitive_type LBRACKET RBRACKET
+   95           | IDENT LBRACKET RBRACKET
 
-   94 array_declaration: array_type IDENT SEMICOLON
-   95                  | array_type IDENT ASSIGN array_initialization SEMICOLON
+   96 type_abstract: IDENT
 
-   96 array_initialization: NEW type_abstract array_dimensions
-   97                     | NEW premitive_type array_dimensions
-   98                     | LBRACE array_elements RBRACE
+   97 array_declaration: array_type IDENT SEMICOLON
+   98                  | array_type IDENT ASSIGN array_initialization SEMICOLON
 
-   99 array_dimensions: LBRACKET expression RBRACKET
-  100                 | array_dimensions LBRACKET expression RBRACKET
+   99 array_initialization: NEW type_abstract array_dimensions
+  100                     | NEW premitive_type array_dimensions
+  101                     | LBRACE array_elements RBRACE
 
-  101 array_elements: expression
-  102               | array_elements COMMA expression
+  102 array_dimensions: LBRACKET expression RBRACKET
+  103                 | array_dimensions LBRACKET expression RBRACKET
 
-  103 array_access: IDENT array_indices
+  104 array_elements: expression
+  105               | array_elements COMMA expression
 
-  104 array_indices: LBRACKET expression RBRACKET
-  105              | array_indices LBRACKET expression RBRACKET
+  106 array_access: IDENT array_indices
+
+  107 array_indices: LBRACKET expression RBRACKET
+  108              | array_indices LBRACKET expression RBRACKET
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-BOOLEAN (258) 84
-CHAR (259) 85
-CLASS (260) 3
-DOUBLE (261) 86
-FLOAT (262) 83
-FINAL (263) 33 34
-INT (264) 82
-STRING (265) 88
-LONG (266) 89
-PRIVATE (267) 4
-PROTECTED (268) 6
-VOID (269) 87
-PUBLIC (270) 5
-SHORT (271) 90
-STATIC (272) 8
-NEW (273) 18 96 97
-THIS (274) 22 51
-SELF (275) 52
-ASSIGN (276) 17 22 28 29 30 37 38 95
-EQ (277) 64
-NEQ (278) 65
-LT (279) 66
-GT (280) 67
-LTE (281) 68
-GTE (282) 69
-AND (283) 70
-OR (284) 71
-NOT (285) 74
-PLUS (286) 59
-MINUS (287) 60 72
-MULTIPLY (288) 61
-DIVIDE (289) 62
-MOD (290) 63
-STRING_LITERAL (291) 78
-LPAREN (292) 18 19 48 53 54 75
-RPAREN (293) 18 19 48 53 54 75
-LBRACE (294) 3 14 19 98
-RBRACE (295) 3 14 19 98
-LBRACKET (296) 91 92 99 100 104 105
-RBRACKET (297) 91 92 99 100 104 105
-SEMICOLON (298) 17 21 31 32 33 34 41 45 46 94 95
-COMMA (299) 26 35 37 58 102
-DOT (300) 22 48 49 50 54
-IDENT (301) 3 17 18 19 22 27 28 29 39 49 50 54 76 92 93 94 95 103
-NUM (302) 77
-SYSTEM (303) 48
-OUT (304) 48
-PRINTLN (305) 48
-UMINUS (306)
+BOOLEAN (258) 87
+CHAR (259) 88
+CLASS (260) 4
+DOUBLE (261) 89
+FLOAT (262) 86
+FINAL (263) 36 37
+INT (264) 85
+STRING (265) 91
+LONG (266) 92
+PRIVATE (267) 5
+PROTECTED (268) 7
+VOID (269) 90
+PUBLIC (270) 6
+SHORT (271) 93
+STATIC (272) 9
+NEW (273) 20 99 100
+THIS (274) 24 54
+SELF (275) 55
+ASSIGN (276) 19 24 30 31 32 33 98
+EQ (277) 67
+NEQ (278) 68
+LT (279) 69
+GT (280) 70
+LTE (281) 71
+GTE (282) 72
+AND (283) 73
+OR (284) 74
+NOT (285) 77
+PLUS (286) 62
+MINUS (287) 63 75
+MULTIPLY (288) 64
+DIVIDE (289) 65
+MOD (290) 66
+STRING_LITERAL (291) 81
+LPAREN (292) 20 21 51 56 57 78
+RPAREN (293) 20 21 51 56 57 78
+LBRACE (294) 4 17 18 21 101
+RBRACE (295) 4 17 18 21 101
+LBRACKET (296) 94 95 102 103 107 108
+RBRACKET (297) 94 95 102 103 107 108
+SEMICOLON (298) 19 23 34 35 36 37 44 48 49 97 98
+COMMA (299) 28 38 40 61 105
+DOT (300) 24 51 52 53 57
+IDENT (301) 4 19 20 21 24 29 30 31 32 42 52 53 57 79 95 96 97 98 106
+NUM (302) 80
+SYSTEM (303) 51
+OUT (304) 51
+PRINTLN (305) 51
+ERR (306)
+UMINUS (307)
 
 
 Nonterminals, with rules where they appear
 
-$accept (52)
+$accept (53)
     on left: 0
-class_declaration_list (53)
-    on left: 1 2, on right: 0 2
-class_declaration (54)
-    on left: 3, on right: 1 2
-modificator (55)
-    on left: 4 5 6 7, on right: 3
-class_type (56)
-    on left: 8 9, on right: 3
-class_body (57)
-    on left: 10 11, on right: 3
-core_body (58)
-    on left: 12 13 14, on right: 11 16
-core_body_list (59)
-    on left: 15 16, on right: 14 16
-instanciation (60)
-    on left: 17, on right: 47
-creation_object (61)
-    on left: 18, on right: 17
-constructor_declaration (62)
-    on left: 19, on right: 13
-constructor_body (63)
-    on left: 20 21, on right: 19 21
-constructor_assignment (64)
-    on left: 22, on right: 21
-params (65)
-    on left: 23 24, on right: 19
-param_list (66)
-    on left: 25 26, on right: 24 26
-param_def (67)
-    on left: 27, on right: 25 26
-assignment (68)
-    on left: 28 29 30, on right: 40 41
-variables_declaration (69)
-    on left: 31 32, on right: 43
-constantes_declaration (70)
-    on left: 33 34, on right: 44
-variables_init (71)
-    on left: 35 36, on right: 31 32 35
-constantes_init (72)
-    on left: 37 38, on right: 33 34 37
-variable_init (73)
-    on left: 39 40, on right: 35 36
-statement (74)
-    on left: 41 42 43 44 45 46 47, on right: 12
-print_statement (75)
-    on left: 48, on right: 45
-sufix_methode_list (76)
-    on left: 49 50, on right: 50 53
-method_prefix (77)
-    on left: 51 52, on right: 54
-method_call (78)
-    on left: 53 54, on right: 29 46
-args (79)
-    on left: 55 56, on right: 18 53 54
-arg_list (80)
-    on left: 57 58, on right: 56 58
-expression (81)
-    on left: 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73, on right:
-    22 28 30 48 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 75
-    99 100 101 102 104 105
-simple_expression (82)
-    on left: 74 75 76 77 78, on right: 59 60 61 62 63 64 65 66 67 68
-    69 70 71 73 74
-types (83)
-    on left: 79 80 81, on right: 27
-premitive_type (84)
-    on left: 82 83 84 85 86 87 88 89 90, on right: 32 34 79 91 97
-array_type (85)
-    on left: 91 92, on right: 81 94 95
-type_abstract (86)
-    on left: 93, on right: 17 31 33 80 96
-array_declaration (87)
-    on left: 94 95, on right: 42
-array_initialization (88)
-    on left: 96 97 98, on right: 95
-array_dimensions (89)
-    on left: 99 100, on right: 96 97 100
-array_elements (90)
-    on left: 101 102, on right: 98 102
-array_access (91)
-    on left: 103, on right: 30
-array_indices (92)
-    on left: 104 105, on right: 103 105
+program (54)
+    on left: 1, on right: 0
+class_declaration_list (55)
+    on left: 2 3, on right: 1 3
+class_declaration (56)
+    on left: 4, on right: 2 3
+modificator (57)
+    on left: 5 6 7 8, on right: 4
+class_type (58)
+    on left: 9 10, on right: 4
+class_body (59)
+    on left: 11 12, on right: 4
+core_body_sequence (60)
+    on left: 13 14, on right: 12 14 18
+core_body (61)
+    on left: 15 16 17 18, on right: 13 14
+instanciation (62)
+    on left: 19, on right: 50
+creation_object (63)
+    on left: 20, on right: 19
+constructor_declaration (64)
+    on left: 21, on right: 16
+constructor_body (65)
+    on left: 22 23, on right: 21 23
+constructor_assignment (66)
+    on left: 24, on right: 23
+params (67)
+    on left: 25 26, on right: 21
+param_list (68)
+    on left: 27 28, on right: 26 28
+param_def (69)
+    on left: 29, on right: 27 28
+assignment (70)
+    on left: 30 31 32 33, on right: 40 41 43 44
+variables_declaration (71)
+    on left: 34 35, on right: 46
+constantes_declaration (72)
+    on left: 36 37, on right: 47
+variables_init (73)
+    on left: 38 39, on right: 34 35 38
+constantes_init (74)
+    on left: 40 41, on right: 36 37 40
+variable_init (75)
+    on left: 42 43, on right: 38 39
+statement (76)
+    on left: 44 45 46 47 48 49 50, on right: 15
+print_statement (77)
+    on left: 51, on right: 48
+sufix_methode_list (78)
+    on left: 52 53, on right: 53 56
+method_prefix (79)
+    on left: 54 55, on right: 57
+method_call (80)
+    on left: 56 57, on right: 32 49
+args (81)
+    on left: 58 59, on right: 20 56 57
+arg_list (82)
+    on left: 60 61, on right: 59 61
+expression (83)
+    on left: 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76, on right:
+    24 30 33 51 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 78
+    102 103 104 105 107 108
+simple_expression (84)
+    on left: 77 78 79 80 81, on right: 62 63 64 65 66 67 68 69 70 71
+    72 73 74 76 77
+types (85)
+    on left: 82 83 84, on right: 29
+premitive_type (86)
+    on left: 85 86 87 88 89 90 91 92 93, on right: 35 37 82 94 100
+array_type (87)
+    on left: 94 95, on right: 84 97 98
+type_abstract (88)
+    on left: 96, on right: 19 34 36 83 99
+array_declaration (89)
+    on left: 97 98, on right: 45
+array_initialization (90)
+    on left: 99 100 101, on right: 98
+array_dimensions (91)
+    on left: 102 103, on right: 99 100 103
+array_elements (92)
+    on left: 104 105, on right: 101 105
+array_access (93)
+    on left: 106, on right: 31 33
+array_indices (94)
+    on left: 107 108, on right: 106 108
 
 
 state 0
 
-    0 $accept: . class_declaration_list $end
+    0 $accept: . program $end
 
     PRIVATE    shift, and go to state 1
     PROTECTED  shift, and go to state 2
     PUBLIC     shift, and go to state 3
 
-    $default  reduce using rule 7 (modificator)
+    $default  reduce using rule 8 (modificator)
 
-    class_declaration_list  go to state 4
-    class_declaration       go to state 5
-    modificator             go to state 6
+    program                 go to state 4
+    class_declaration_list  go to state 5
+    class_declaration       go to state 6
+    modificator             go to state 7
 
 
 state 1
 
-    4 modificator: PRIVATE .
-
-    $default  reduce using rule 4 (modificator)
-
-
-state 2
-
-    6 modificator: PROTECTED .
-
-    $default  reduce using rule 6 (modificator)
-
-
-state 3
-
-    5 modificator: PUBLIC .
+    5 modificator: PRIVATE .
 
     $default  reduce using rule 5 (modificator)
 
 
-state 4
+state 2
 
-    0 $accept: class_declaration_list . $end
-    2 class_declaration_list: class_declaration_list . class_declaration
-
-    $end       shift, and go to state 7
-    PRIVATE    shift, and go to state 1
-    PROTECTED  shift, and go to state 2
-    PUBLIC     shift, and go to state 3
+    7 modificator: PROTECTED .
 
     $default  reduce using rule 7 (modificator)
 
-    class_declaration  go to state 8
-    modificator        go to state 6
+
+state 3
+
+    6 modificator: PUBLIC .
+
+    $default  reduce using rule 6 (modificator)
+
+
+state 4
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 8
 
 
 state 5
 
-    1 class_declaration_list: class_declaration .
+    1 program: class_declaration_list .
+    3 class_declaration_list: class_declaration_list . class_declaration
 
-    $default  reduce using rule 1 (class_declaration_list)
+    PRIVATE    shift, and go to state 1
+    PROTECTED  shift, and go to state 2
+    PUBLIC     shift, and go to state 3
+
+    $end      reduce using rule 1 (program)
+    $default  reduce using rule 8 (modificator)
+
+    class_declaration  go to state 9
+    modificator        go to state 7
 
 
 state 6
 
-    3 class_declaration: modificator . class_type CLASS IDENT LBRACE class_body RBRACE
-
-    STATIC  shift, and go to state 9
-
-    $default  reduce using rule 9 (class_type)
-
-    class_type  go to state 10
-
-
-state 7
-
-    0 $accept: class_declaration_list $end .
-
-    $default  accept
-
-
-state 8
-
-    2 class_declaration_list: class_declaration_list class_declaration .
+    2 class_declaration_list: class_declaration .
 
     $default  reduce using rule 2 (class_declaration_list)
 
 
+state 7
+
+    4 class_declaration: modificator . class_type CLASS IDENT LBRACE class_body RBRACE
+
+    STATIC  shift, and go to state 10
+
+    $default  reduce using rule 10 (class_type)
+
+    class_type  go to state 11
+
+
+state 8
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
 state 9
 
-    8 class_type: STATIC .
+    3 class_declaration_list: class_declaration_list class_declaration .
 
-    $default  reduce using rule 8 (class_type)
+    $default  reduce using rule 3 (class_declaration_list)
 
 
 state 10
 
-    3 class_declaration: modificator class_type . CLASS IDENT LBRACE class_body RBRACE
+    9 class_type: STATIC .
 
-    CLASS  shift, and go to state 11
+    $default  reduce using rule 9 (class_type)
 
 
 state 11
 
-    3 class_declaration: modificator class_type CLASS . IDENT LBRACE class_body RBRACE
+    4 class_declaration: modificator class_type . CLASS IDENT LBRACE class_body RBRACE
 
-    IDENT  shift, and go to state 12
+    CLASS  shift, and go to state 12
 
 
 state 12
 
-    3 class_declaration: modificator class_type CLASS IDENT . LBRACE class_body RBRACE
+    4 class_declaration: modificator class_type CLASS . IDENT LBRACE class_body RBRACE
 
-    LBRACE  shift, and go to state 13
+    IDENT  shift, and go to state 13
 
 
 state 13
 
-    3 class_declaration: modificator class_type CLASS IDENT LBRACE . class_body RBRACE
+    4 class_declaration: modificator class_type CLASS IDENT . LBRACE class_body RBRACE
 
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    FINAL    shift, and go to state 18
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    THIS     shift, and go to state 24
-    SELF     shift, and go to state 25
-    LBRACE   shift, and go to state 26
-    IDENT    shift, and go to state 27
-    SYSTEM   shift, and go to state 28
-
-    $default  reduce using rule 10 (class_body)
-
-    class_body               go to state 29
-    core_body                go to state 30
-    instanciation            go to state 31
-    constructor_declaration  go to state 32
-    assignment               go to state 33
-    variables_declaration    go to state 34
-    constantes_declaration   go to state 35
-    statement                go to state 36
-    print_statement          go to state 37
-    sufix_methode_list       go to state 38
-    method_prefix            go to state 39
-    method_call              go to state 40
-    premitive_type           go to state 41
-    array_type               go to state 42
-    type_abstract            go to state 43
-    array_declaration        go to state 44
-    array_access             go to state 45
+    LBRACE  shift, and go to state 14
 
 
 state 14
 
-   84 premitive_type: BOOLEAN .
+    4 class_declaration: modificator class_type CLASS IDENT LBRACE . class_body RBRACE
 
-    $default  reduce using rule 84 (premitive_type)
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    FINAL    shift, and go to state 19
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    THIS     shift, and go to state 25
+    SELF     shift, and go to state 26
+    LBRACE   shift, and go to state 27
+    IDENT    shift, and go to state 28
+    SYSTEM   shift, and go to state 29
+
+    $default  reduce using rule 11 (class_body)
+
+    class_body               go to state 30
+    core_body_sequence       go to state 31
+    core_body                go to state 32
+    instanciation            go to state 33
+    constructor_declaration  go to state 34
+    assignment               go to state 35
+    variables_declaration    go to state 36
+    constantes_declaration   go to state 37
+    statement                go to state 38
+    print_statement          go to state 39
+    sufix_methode_list       go to state 40
+    method_prefix            go to state 41
+    method_call              go to state 42
+    premitive_type           go to state 43
+    array_type               go to state 44
+    type_abstract            go to state 45
+    array_declaration        go to state 46
+    array_access             go to state 47
 
 
 state 15
 
-   85 premitive_type: CHAR .
-
-    $default  reduce using rule 85 (premitive_type)
-
-
-state 16
-
-   86 premitive_type: DOUBLE .
-
-    $default  reduce using rule 86 (premitive_type)
-
-
-state 17
-
-   83 premitive_type: FLOAT .
-
-    $default  reduce using rule 83 (premitive_type)
-
-
-state 18
-
-   33 constantes_declaration: FINAL . type_abstract constantes_init SEMICOLON
-   34                       | FINAL . premitive_type constantes_init SEMICOLON
-
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    IDENT    shift, and go to state 46
-
-    premitive_type  go to state 47
-    type_abstract   go to state 48
-
-
-state 19
-
-   82 premitive_type: INT .
-
-    $default  reduce using rule 82 (premitive_type)
-
-
-state 20
-
-   88 premitive_type: STRING .
-
-    $default  reduce using rule 88 (premitive_type)
-
-
-state 21
-
-   89 premitive_type: LONG .
-
-    $default  reduce using rule 89 (premitive_type)
-
-
-state 22
-
-   87 premitive_type: VOID .
+   87 premitive_type: BOOLEAN .
 
     $default  reduce using rule 87 (premitive_type)
 
 
+state 16
+
+   88 premitive_type: CHAR .
+
+    $default  reduce using rule 88 (premitive_type)
+
+
+state 17
+
+   89 premitive_type: DOUBLE .
+
+    $default  reduce using rule 89 (premitive_type)
+
+
+state 18
+
+   86 premitive_type: FLOAT .
+
+    $default  reduce using rule 86 (premitive_type)
+
+
+state 19
+
+   36 constantes_declaration: FINAL . type_abstract constantes_init SEMICOLON
+   37                       | FINAL . premitive_type constantes_init SEMICOLON
+
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    IDENT    shift, and go to state 48
+
+    premitive_type  go to state 49
+    type_abstract   go to state 50
+
+
+state 20
+
+   85 premitive_type: INT .
+
+    $default  reduce using rule 85 (premitive_type)
+
+
+state 21
+
+   91 premitive_type: STRING .
+
+    $default  reduce using rule 91 (premitive_type)
+
+
+state 22
+
+   92 premitive_type: LONG .
+
+    $default  reduce using rule 92 (premitive_type)
+
+
 state 23
 
-   90 premitive_type: SHORT .
+   90 premitive_type: VOID .
 
     $default  reduce using rule 90 (premitive_type)
 
 
 state 24
 
-   51 method_prefix: THIS .
+   93 premitive_type: SHORT .
 
-    $default  reduce using rule 51 (method_prefix)
+    $default  reduce using rule 93 (premitive_type)
 
 
 state 25
 
-   52 method_prefix: SELF .
+   54 method_prefix: THIS .
 
-    $default  reduce using rule 52 (method_prefix)
+    $default  reduce using rule 54 (method_prefix)
 
 
 state 26
 
-   14 core_body: LBRACE . core_body_list RBRACE
+   55 method_prefix: SELF .
 
-    $default  reduce using rule 15 (core_body_list)
-
-    core_body_list  go to state 49
+    $default  reduce using rule 55 (method_prefix)
 
 
 state 27
 
-   19 constructor_declaration: IDENT . LPAREN params RPAREN LBRACE constructor_body RBRACE
-   28 assignment: IDENT . ASSIGN expression
-   29           | IDENT . ASSIGN method_call
-   49 sufix_methode_list: IDENT . DOT IDENT
-   92 array_type: IDENT . LBRACKET RBRACKET
-   93 type_abstract: IDENT .
-  103 array_access: IDENT . array_indices
+   17 core_body: LBRACE . RBRACE
+   18          | LBRACE . core_body_sequence RBRACE
 
-    ASSIGN    shift, and go to state 50
-    LPAREN    shift, and go to state 51
-    LBRACKET  shift, and go to state 52
-    DOT       shift, and go to state 53
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    FINAL    shift, and go to state 19
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    THIS     shift, and go to state 25
+    SELF     shift, and go to state 26
+    LBRACE   shift, and go to state 27
+    RBRACE   shift, and go to state 51
+    IDENT    shift, and go to state 28
+    SYSTEM   shift, and go to state 29
 
-    $default  reduce using rule 93 (type_abstract)
-
-    array_indices  go to state 54
+    core_body_sequence       go to state 52
+    core_body                go to state 32
+    instanciation            go to state 33
+    constructor_declaration  go to state 34
+    assignment               go to state 35
+    variables_declaration    go to state 36
+    constantes_declaration   go to state 37
+    statement                go to state 38
+    print_statement          go to state 39
+    sufix_methode_list       go to state 40
+    method_prefix            go to state 41
+    method_call              go to state 42
+    premitive_type           go to state 43
+    array_type               go to state 44
+    type_abstract            go to state 45
+    array_declaration        go to state 46
+    array_access             go to state 47
 
 
 state 28
 
-   48 print_statement: SYSTEM . DOT OUT DOT PRINTLN LPAREN expression RPAREN
+   21 constructor_declaration: IDENT . LPAREN params RPAREN LBRACE constructor_body RBRACE
+   30 assignment: IDENT . ASSIGN expression
+   31           | IDENT . ASSIGN array_access
+   32           | IDENT . ASSIGN method_call
+   52 sufix_methode_list: IDENT . DOT IDENT
+   95 array_type: IDENT . LBRACKET RBRACKET
+   96 type_abstract: IDENT .
+  106 array_access: IDENT . array_indices
 
-    DOT  shift, and go to state 55
+    ASSIGN    shift, and go to state 53
+    LPAREN    shift, and go to state 54
+    LBRACKET  shift, and go to state 55
+    DOT       shift, and go to state 56
+
+    $default  reduce using rule 96 (type_abstract)
+
+    array_indices  go to state 57
 
 
 state 29
 
-    3 class_declaration: modificator class_type CLASS IDENT LBRACE class_body . RBRACE
+   51 print_statement: SYSTEM . DOT OUT DOT PRINTLN LPAREN expression RPAREN
 
-    RBRACE  shift, and go to state 56
+    DOT  shift, and go to state 58
 
 
 state 30
 
-   11 class_body: core_body .
+    4 class_declaration: modificator class_type CLASS IDENT LBRACE class_body . RBRACE
 
-    $default  reduce using rule 11 (class_body)
+    RBRACE  shift, and go to state 59
 
 
 state 31
 
-   47 statement: instanciation .
+   12 class_body: core_body_sequence .
+   14 core_body_sequence: core_body_sequence . core_body
 
-    $default  reduce using rule 47 (statement)
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    FINAL    shift, and go to state 19
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    THIS     shift, and go to state 25
+    SELF     shift, and go to state 26
+    LBRACE   shift, and go to state 27
+    IDENT    shift, and go to state 28
+    SYSTEM   shift, and go to state 29
+
+    $default  reduce using rule 12 (class_body)
+
+    core_body                go to state 60
+    instanciation            go to state 33
+    constructor_declaration  go to state 34
+    assignment               go to state 35
+    variables_declaration    go to state 36
+    constantes_declaration   go to state 37
+    statement                go to state 38
+    print_statement          go to state 39
+    sufix_methode_list       go to state 40
+    method_prefix            go to state 41
+    method_call              go to state 42
+    premitive_type           go to state 43
+    array_type               go to state 44
+    type_abstract            go to state 45
+    array_declaration        go to state 46
+    array_access             go to state 47
 
 
 state 32
 
-   13 core_body: constructor_declaration .
+   13 core_body_sequence: core_body .
 
-    $default  reduce using rule 13 (core_body)
+    $default  reduce using rule 13 (core_body_sequence)
 
 
 state 33
 
-   41 statement: assignment . SEMICOLON
+   50 statement: instanciation .
 
-    SEMICOLON  shift, and go to state 57
+    $default  reduce using rule 50 (statement)
 
 
 state 34
 
-   43 statement: variables_declaration .
+   16 core_body: constructor_declaration .
 
-    $default  reduce using rule 43 (statement)
+    $default  reduce using rule 16 (core_body)
 
 
 state 35
 
-   44 statement: constantes_declaration .
+   44 statement: assignment . SEMICOLON
 
-    $default  reduce using rule 44 (statement)
+    SEMICOLON  shift, and go to state 61
 
 
 state 36
 
-   12 core_body: statement .
-
-    $default  reduce using rule 12 (core_body)
-
-
-state 37
-
-   45 statement: print_statement . SEMICOLON
-
-    SEMICOLON  shift, and go to state 58
-
-
-state 38
-
-   50 sufix_methode_list: sufix_methode_list . DOT IDENT
-   53 method_call: sufix_methode_list . LPAREN args RPAREN
-
-    LPAREN  shift, and go to state 59
-    DOT     shift, and go to state 60
-
-
-state 39
-
-   54 method_call: method_prefix . DOT IDENT LPAREN args RPAREN
-
-    DOT  shift, and go to state 61
-
-
-state 40
-
-   46 statement: method_call . SEMICOLON
-
-    SEMICOLON  shift, and go to state 62
-
-
-state 41
-
-   32 variables_declaration: premitive_type . variables_init SEMICOLON
-   91 array_type: premitive_type . LBRACKET RBRACKET
-
-    LBRACKET  shift, and go to state 63
-    IDENT     shift, and go to state 64
-
-    assignment      go to state 65
-    variables_init  go to state 66
-    variable_init   go to state 67
-    array_access    go to state 45
-
-
-state 42
-
-   94 array_declaration: array_type . IDENT SEMICOLON
-   95                  | array_type . IDENT ASSIGN array_initialization SEMICOLON
-
-    IDENT  shift, and go to state 68
-
-
-state 43
-
-   17 instanciation: type_abstract . IDENT ASSIGN creation_object SEMICOLON
-   31 variables_declaration: type_abstract . variables_init SEMICOLON
-
-    IDENT  shift, and go to state 69
-
-    assignment      go to state 65
-    variables_init  go to state 70
-    variable_init   go to state 67
-    array_access    go to state 45
-
-
-state 44
-
-   42 statement: array_declaration .
-
-    $default  reduce using rule 42 (statement)
-
-
-state 45
-
-   30 assignment: array_access . ASSIGN expression
-
-    ASSIGN  shift, and go to state 71
-
-
-state 46
-
-   93 type_abstract: IDENT .
-
-    $default  reduce using rule 93 (type_abstract)
-
-
-state 47
-
-   34 constantes_declaration: FINAL premitive_type . constantes_init SEMICOLON
-
-    ASSIGN  shift, and go to state 72
-
-    constantes_init  go to state 73
-
-
-state 48
-
-   33 constantes_declaration: FINAL type_abstract . constantes_init SEMICOLON
-
-    ASSIGN  shift, and go to state 72
-
-    constantes_init  go to state 74
-
-
-state 49
-
-   14 core_body: LBRACE core_body_list . RBRACE
-   16 core_body_list: core_body_list . core_body
-
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    FINAL    shift, and go to state 18
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    THIS     shift, and go to state 24
-    SELF     shift, and go to state 25
-    LBRACE   shift, and go to state 26
-    RBRACE   shift, and go to state 75
-    IDENT    shift, and go to state 27
-    SYSTEM   shift, and go to state 28
-
-    core_body                go to state 76
-    instanciation            go to state 31
-    constructor_declaration  go to state 32
-    assignment               go to state 33
-    variables_declaration    go to state 34
-    constantes_declaration   go to state 35
-    statement                go to state 36
-    print_statement          go to state 37
-    sufix_methode_list       go to state 38
-    method_prefix            go to state 39
-    method_call              go to state 40
-    premitive_type           go to state 41
-    array_type               go to state 42
-    type_abstract            go to state 43
-    array_declaration        go to state 44
-    array_access             go to state 45
-
-
-state 50
-
-   28 assignment: IDENT ASSIGN . expression
-   29           | IDENT ASSIGN . method_call
-
-    THIS            shift, and go to state 24
-    SELF            shift, and go to state 25
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 81
-    NUM             shift, and go to state 82
-
-    sufix_methode_list  go to state 38
-    method_prefix       go to state 39
-    method_call         go to state 83
-    expression          go to state 84
-    simple_expression   go to state 85
-
-
-state 51
-
-   19 constructor_declaration: IDENT LPAREN . params RPAREN LBRACE constructor_body RBRACE
-
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    IDENT    shift, and go to state 86
-
-    $default  reduce using rule 23 (params)
-
-    params          go to state 87
-    param_list      go to state 88
-    param_def       go to state 89
-    types           go to state 90
-    premitive_type  go to state 91
-    array_type      go to state 92
-    type_abstract   go to state 93
-
-
-state 52
-
-   92 array_type: IDENT LBRACKET . RBRACKET
-  104 array_indices: LBRACKET . expression RBRACKET
-
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    RBRACKET        shift, and go to state 94
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 96
-    simple_expression  go to state 85
-
-
-state 53
-
-   49 sufix_methode_list: IDENT DOT . IDENT
-
-    IDENT  shift, and go to state 97
-
-
-state 54
-
-  103 array_access: IDENT array_indices .
-  105 array_indices: array_indices . LBRACKET expression RBRACKET
-
-    LBRACKET  shift, and go to state 98
-
-    $default  reduce using rule 103 (array_access)
-
-
-state 55
-
-   48 print_statement: SYSTEM DOT . OUT DOT PRINTLN LPAREN expression RPAREN
-
-    OUT  shift, and go to state 99
-
-
-state 56
-
-    3 class_declaration: modificator class_type CLASS IDENT LBRACE class_body RBRACE .
-
-    $default  reduce using rule 3 (class_declaration)
-
-
-state 57
-
-   41 statement: assignment SEMICOLON .
-
-    $default  reduce using rule 41 (statement)
-
-
-state 58
-
-   45 statement: print_statement SEMICOLON .
-
-    $default  reduce using rule 45 (statement)
-
-
-state 59
-
-   53 method_call: sufix_methode_list LPAREN . args RPAREN
-
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    $default  reduce using rule 55 (args)
-
-    args               go to state 100
-    arg_list           go to state 101
-    expression         go to state 102
-    simple_expression  go to state 85
-
-
-state 60
-
-   50 sufix_methode_list: sufix_methode_list DOT . IDENT
-
-    IDENT  shift, and go to state 103
-
-
-state 61
-
-   54 method_call: method_prefix DOT . IDENT LPAREN args RPAREN
-
-    IDENT  shift, and go to state 104
-
-
-state 62
-
-   46 statement: method_call SEMICOLON .
+   46 statement: variables_declaration .
 
     $default  reduce using rule 46 (statement)
 
 
+state 37
+
+   47 statement: constantes_declaration .
+
+    $default  reduce using rule 47 (statement)
+
+
+state 38
+
+   15 core_body: statement .
+
+    $default  reduce using rule 15 (core_body)
+
+
+state 39
+
+   48 statement: print_statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 62
+
+
+state 40
+
+   53 sufix_methode_list: sufix_methode_list . DOT IDENT
+   56 method_call: sufix_methode_list . LPAREN args RPAREN
+
+    LPAREN  shift, and go to state 63
+    DOT     shift, and go to state 64
+
+
+state 41
+
+   57 method_call: method_prefix . DOT IDENT LPAREN args RPAREN
+
+    DOT  shift, and go to state 65
+
+
+state 42
+
+   49 statement: method_call . SEMICOLON
+
+    SEMICOLON  shift, and go to state 66
+
+
+state 43
+
+   35 variables_declaration: premitive_type . variables_init SEMICOLON
+   94 array_type: premitive_type . LBRACKET RBRACKET
+
+    LBRACKET  shift, and go to state 67
+    IDENT     shift, and go to state 68
+
+    assignment      go to state 69
+    variables_init  go to state 70
+    variable_init   go to state 71
+    array_access    go to state 47
+
+
+state 44
+
+   97 array_declaration: array_type . IDENT SEMICOLON
+   98                  | array_type . IDENT ASSIGN array_initialization SEMICOLON
+
+    IDENT  shift, and go to state 72
+
+
+state 45
+
+   19 instanciation: type_abstract . IDENT ASSIGN creation_object SEMICOLON
+   34 variables_declaration: type_abstract . variables_init SEMICOLON
+
+    IDENT  shift, and go to state 73
+
+    assignment      go to state 69
+    variables_init  go to state 74
+    variable_init   go to state 71
+    array_access    go to state 47
+
+
+state 46
+
+   45 statement: array_declaration .
+
+    $default  reduce using rule 45 (statement)
+
+
+state 47
+
+   33 assignment: array_access . ASSIGN expression
+
+    ASSIGN  shift, and go to state 75
+
+
+state 48
+
+   96 type_abstract: IDENT .
+
+    $default  reduce using rule 96 (type_abstract)
+
+
+state 49
+
+   37 constantes_declaration: FINAL premitive_type . constantes_init SEMICOLON
+
+    IDENT  shift, and go to state 76
+
+    assignment       go to state 77
+    constantes_init  go to state 78
+    array_access     go to state 47
+
+
+state 50
+
+   36 constantes_declaration: FINAL type_abstract . constantes_init SEMICOLON
+
+    IDENT  shift, and go to state 76
+
+    assignment       go to state 77
+    constantes_init  go to state 79
+    array_access     go to state 47
+
+
+state 51
+
+   17 core_body: LBRACE RBRACE .
+
+    $default  reduce using rule 17 (core_body)
+
+
+state 52
+
+   14 core_body_sequence: core_body_sequence . core_body
+   18 core_body: LBRACE core_body_sequence . RBRACE
+
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    FINAL    shift, and go to state 19
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    THIS     shift, and go to state 25
+    SELF     shift, and go to state 26
+    LBRACE   shift, and go to state 27
+    RBRACE   shift, and go to state 80
+    IDENT    shift, and go to state 28
+    SYSTEM   shift, and go to state 29
+
+    core_body                go to state 60
+    instanciation            go to state 33
+    constructor_declaration  go to state 34
+    assignment               go to state 35
+    variables_declaration    go to state 36
+    constantes_declaration   go to state 37
+    statement                go to state 38
+    print_statement          go to state 39
+    sufix_methode_list       go to state 40
+    method_prefix            go to state 41
+    method_call              go to state 42
+    premitive_type           go to state 43
+    array_type               go to state 44
+    type_abstract            go to state 45
+    array_declaration        go to state 46
+    array_access             go to state 47
+
+
+state 53
+
+   30 assignment: IDENT ASSIGN . expression
+   31           | IDENT ASSIGN . array_access
+   32           | IDENT ASSIGN . method_call
+
+    THIS            shift, and go to state 25
+    SELF            shift, and go to state 26
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 85
+    NUM             shift, and go to state 86
+
+    sufix_methode_list  go to state 40
+    method_prefix       go to state 41
+    method_call         go to state 87
+    expression          go to state 88
+    simple_expression   go to state 89
+    array_access        go to state 90
+
+
+state 54
+
+   21 constructor_declaration: IDENT LPAREN . params RPAREN LBRACE constructor_body RBRACE
+
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    IDENT    shift, and go to state 91
+
+    $default  reduce using rule 25 (params)
+
+    params          go to state 92
+    param_list      go to state 93
+    param_def       go to state 94
+    types           go to state 95
+    premitive_type  go to state 96
+    array_type      go to state 97
+    type_abstract   go to state 98
+
+
+state 55
+
+   95 array_type: IDENT LBRACKET . RBRACKET
+  107 array_indices: LBRACKET . expression RBRACKET
+
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    RBRACKET        shift, and go to state 99
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 101
+    simple_expression  go to state 89
+
+
+state 56
+
+   52 sufix_methode_list: IDENT DOT . IDENT
+
+    IDENT  shift, and go to state 102
+
+
+state 57
+
+  106 array_access: IDENT array_indices .
+  108 array_indices: array_indices . LBRACKET expression RBRACKET
+
+    LBRACKET  shift, and go to state 103
+
+    $default  reduce using rule 106 (array_access)
+
+
+state 58
+
+   51 print_statement: SYSTEM DOT . OUT DOT PRINTLN LPAREN expression RPAREN
+
+    OUT  shift, and go to state 104
+
+
+state 59
+
+    4 class_declaration: modificator class_type CLASS IDENT LBRACE class_body RBRACE .
+
+    $default  reduce using rule 4 (class_declaration)
+
+
+state 60
+
+   14 core_body_sequence: core_body_sequence core_body .
+
+    $default  reduce using rule 14 (core_body_sequence)
+
+
+state 61
+
+   44 statement: assignment SEMICOLON .
+
+    $default  reduce using rule 44 (statement)
+
+
+state 62
+
+   48 statement: print_statement SEMICOLON .
+
+    $default  reduce using rule 48 (statement)
+
+
 state 63
 
-   91 array_type: premitive_type LBRACKET . RBRACKET
+   56 method_call: sufix_methode_list LPAREN . args RPAREN
 
-    RBRACKET  shift, and go to state 105
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    $default  reduce using rule 58 (args)
+
+    args               go to state 105
+    arg_list           go to state 106
+    expression         go to state 107
+    simple_expression  go to state 89
 
 
 state 64
 
-   28 assignment: IDENT . ASSIGN expression
-   29           | IDENT . ASSIGN method_call
-   39 variable_init: IDENT .
-  103 array_access: IDENT . array_indices
+   53 sufix_methode_list: sufix_methode_list DOT . IDENT
 
-    ASSIGN    shift, and go to state 50
-    LBRACKET  shift, and go to state 106
-
-    $default  reduce using rule 39 (variable_init)
-
-    array_indices  go to state 54
+    IDENT  shift, and go to state 108
 
 
 state 65
 
-   40 variable_init: assignment .
+   57 method_call: method_prefix DOT . IDENT LPAREN args RPAREN
 
-    $default  reduce using rule 40 (variable_init)
+    IDENT  shift, and go to state 109
 
 
 state 66
 
-   32 variables_declaration: premitive_type variables_init . SEMICOLON
-   35 variables_init: variables_init . COMMA variable_init
+   49 statement: method_call SEMICOLON .
 
-    SEMICOLON  shift, and go to state 107
-    COMMA      shift, and go to state 108
+    $default  reduce using rule 49 (statement)
 
 
 state 67
 
-   36 variables_init: variable_init .
+   94 array_type: premitive_type LBRACKET . RBRACKET
 
-    $default  reduce using rule 36 (variables_init)
+    RBRACKET  shift, and go to state 110
 
 
 state 68
 
-   94 array_declaration: array_type IDENT . SEMICOLON
-   95                  | array_type IDENT . ASSIGN array_initialization SEMICOLON
+   30 assignment: IDENT . ASSIGN expression
+   31           | IDENT . ASSIGN array_access
+   32           | IDENT . ASSIGN method_call
+   42 variable_init: IDENT .
+  106 array_access: IDENT . array_indices
 
-    ASSIGN     shift, and go to state 109
-    SEMICOLON  shift, and go to state 110
+    ASSIGN    shift, and go to state 53
+    LBRACKET  shift, and go to state 111
+
+    $default  reduce using rule 42 (variable_init)
+
+    array_indices  go to state 57
 
 
 state 69
 
-   17 instanciation: type_abstract IDENT . ASSIGN creation_object SEMICOLON
-   28 assignment: IDENT . ASSIGN expression
-   29           | IDENT . ASSIGN method_call
-   39 variable_init: IDENT .
-  103 array_access: IDENT . array_indices
+   43 variable_init: assignment .
 
-    ASSIGN    shift, and go to state 111
-    LBRACKET  shift, and go to state 106
-
-    $default  reduce using rule 39 (variable_init)
-
-    array_indices  go to state 54
+    $default  reduce using rule 43 (variable_init)
 
 
 state 70
 
-   31 variables_declaration: type_abstract variables_init . SEMICOLON
-   35 variables_init: variables_init . COMMA variable_init
+   35 variables_declaration: premitive_type variables_init . SEMICOLON
+   38 variables_init: variables_init . COMMA variable_init
 
     SEMICOLON  shift, and go to state 112
-    COMMA      shift, and go to state 108
+    COMMA      shift, and go to state 113
 
 
 state 71
 
-   30 assignment: array_access ASSIGN . expression
+   39 variables_init: variable_init .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 113
-    simple_expression  go to state 85
+    $default  reduce using rule 39 (variables_init)
 
 
 state 72
 
-   38 constantes_init: ASSIGN .
+   97 array_declaration: array_type IDENT . SEMICOLON
+   98                  | array_type IDENT . ASSIGN array_initialization SEMICOLON
 
-    $default  reduce using rule 38 (constantes_init)
+    ASSIGN     shift, and go to state 114
+    SEMICOLON  shift, and go to state 115
 
 
 state 73
 
-   34 constantes_declaration: FINAL premitive_type constantes_init . SEMICOLON
-   37 constantes_init: constantes_init . COMMA ASSIGN
+   19 instanciation: type_abstract IDENT . ASSIGN creation_object SEMICOLON
+   30 assignment: IDENT . ASSIGN expression
+   31           | IDENT . ASSIGN array_access
+   32           | IDENT . ASSIGN method_call
+   42 variable_init: IDENT .
+  106 array_access: IDENT . array_indices
 
-    SEMICOLON  shift, and go to state 114
-    COMMA      shift, and go to state 115
+    ASSIGN    shift, and go to state 116
+    LBRACKET  shift, and go to state 111
+
+    $default  reduce using rule 42 (variable_init)
+
+    array_indices  go to state 57
 
 
 state 74
 
-   33 constantes_declaration: FINAL type_abstract constantes_init . SEMICOLON
-   37 constantes_init: constantes_init . COMMA ASSIGN
+   34 variables_declaration: type_abstract variables_init . SEMICOLON
+   38 variables_init: variables_init . COMMA variable_init
 
-    SEMICOLON  shift, and go to state 116
-    COMMA      shift, and go to state 115
+    SEMICOLON  shift, and go to state 117
+    COMMA      shift, and go to state 113
 
 
 state 75
 
-   14 core_body: LBRACE core_body_list RBRACE .
+   33 assignment: array_access ASSIGN . expression
 
-    $default  reduce using rule 14 (core_body)
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 118
+    simple_expression  go to state 89
 
 
 state 76
 
-   16 core_body_list: core_body_list core_body .
+   30 assignment: IDENT . ASSIGN expression
+   31           | IDENT . ASSIGN array_access
+   32           | IDENT . ASSIGN method_call
+  106 array_access: IDENT . array_indices
 
-    $default  reduce using rule 16 (core_body_list)
+    ASSIGN    shift, and go to state 53
+    LBRACKET  shift, and go to state 111
+
+    array_indices  go to state 57
 
 
 state 77
 
-   74 simple_expression: NOT . simple_expression
+   41 constantes_init: assignment .
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    simple_expression  go to state 117
+    $default  reduce using rule 41 (constantes_init)
 
 
 state 78
 
-   72 expression: MINUS . expression
+   37 constantes_declaration: FINAL premitive_type constantes_init . SEMICOLON
+   40 constantes_init: constantes_init . COMMA assignment
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 118
-    simple_expression  go to state 85
+    SEMICOLON  shift, and go to state 119
+    COMMA      shift, and go to state 120
 
 
 state 79
 
-   78 simple_expression: STRING_LITERAL .
+   36 constantes_declaration: FINAL type_abstract constantes_init . SEMICOLON
+   40 constantes_init: constantes_init . COMMA assignment
 
-    $default  reduce using rule 78 (simple_expression)
+    SEMICOLON  shift, and go to state 121
+    COMMA      shift, and go to state 120
 
 
 state 80
 
-   75 simple_expression: LPAREN . expression RPAREN
+   18 core_body: LBRACE core_body_sequence RBRACE .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 119
-    simple_expression  go to state 85
+    $default  reduce using rule 18 (core_body)
 
 
 state 81
 
-   49 sufix_methode_list: IDENT . DOT IDENT
-   76 simple_expression: IDENT .
+   77 simple_expression: NOT . simple_expression
 
-    DOT  shift, and go to state 53
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
-    $default  reduce using rule 76 (simple_expression)
+    simple_expression  go to state 122
 
 
 state 82
 
-   77 simple_expression: NUM .
+   75 expression: MINUS . expression
 
-    $default  reduce using rule 77 (simple_expression)
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 123
+    simple_expression  go to state 89
 
 
 state 83
 
-   29 assignment: IDENT ASSIGN method_call .
+   81 simple_expression: STRING_LITERAL .
 
-    $default  reduce using rule 29 (assignment)
+    $default  reduce using rule 81 (simple_expression)
 
 
 state 84
 
-   28 assignment: IDENT ASSIGN expression .
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
+   78 simple_expression: LPAREN . expression RPAREN
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
-    $default  reduce using rule 28 (assignment)
+    expression         go to state 124
+    simple_expression  go to state 89
 
 
 state 85
 
-   73 expression: simple_expression .
+   52 sufix_methode_list: IDENT . DOT IDENT
+   79 simple_expression: IDENT .
+  106 array_access: IDENT . array_indices
 
-    $default  reduce using rule 73 (expression)
+    LBRACKET  shift, and go to state 111
+    DOT       shift, and go to state 56
+
+    $default  reduce using rule 79 (simple_expression)
+
+    array_indices  go to state 57
 
 
 state 86
 
-   92 array_type: IDENT . LBRACKET RBRACKET
-   93 type_abstract: IDENT .
+   80 simple_expression: NUM .
 
-    LBRACKET  shift, and go to state 133
-
-    $default  reduce using rule 93 (type_abstract)
+    $default  reduce using rule 80 (simple_expression)
 
 
 state 87
 
-   19 constructor_declaration: IDENT LPAREN params . RPAREN LBRACE constructor_body RBRACE
+   32 assignment: IDENT ASSIGN method_call .
 
-    RPAREN  shift, and go to state 134
+    $default  reduce using rule 32 (assignment)
 
 
 state 88
 
-   24 params: param_list .
-   26 param_list: param_list . COMMA param_def
-
-    COMMA  shift, and go to state 135
-
-    $default  reduce using rule 24 (params)
-
-
-state 89
-
-   25 param_list: param_def .
-
-    $default  reduce using rule 25 (param_list)
-
-
-state 90
-
-   27 param_def: types . IDENT
-
-    IDENT  shift, and go to state 136
-
-
-state 91
-
-   79 types: premitive_type .
-   91 array_type: premitive_type . LBRACKET RBRACKET
-
-    LBRACKET  shift, and go to state 63
-
-    $default  reduce using rule 79 (types)
-
-
-state 92
-
-   81 types: array_type .
-
-    $default  reduce using rule 81 (types)
-
-
-state 93
-
-   80 types: type_abstract .
-
-    $default  reduce using rule 80 (types)
-
-
-state 94
-
-   92 array_type: IDENT LBRACKET RBRACKET .
-
-    $default  reduce using rule 92 (array_type)
-
-
-state 95
-
-   76 simple_expression: IDENT .
-
-    $default  reduce using rule 76 (simple_expression)
-
-
-state 96
-
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-  104 array_indices: LBRACKET expression . RBRACKET
-
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RBRACKET  shift, and go to state 137
-
-
-state 97
-
-   49 sufix_methode_list: IDENT DOT IDENT .
-
-    $default  reduce using rule 49 (sufix_methode_list)
-
-
-state 98
-
-  105 array_indices: array_indices LBRACKET . expression RBRACKET
-
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 138
-    simple_expression  go to state 85
-
-
-state 99
-
-   48 print_statement: SYSTEM DOT OUT . DOT PRINTLN LPAREN expression RPAREN
-
-    DOT  shift, and go to state 139
-
-
-state 100
-
-   53 method_call: sufix_methode_list LPAREN args . RPAREN
-
-    RPAREN  shift, and go to state 140
-
-
-state 101
-
-   56 args: arg_list .
-   58 arg_list: arg_list . COMMA expression
-
-    COMMA  shift, and go to state 141
-
-    $default  reduce using rule 56 (args)
-
-
-state 102
-
-   57 arg_list: expression .
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-
-    $default  reduce using rule 57 (arg_list)
-
-
-state 103
-
-   50 sufix_methode_list: sufix_methode_list DOT IDENT .
-
-    $default  reduce using rule 50 (sufix_methode_list)
-
-
-state 104
-
-   54 method_call: method_prefix DOT IDENT . LPAREN args RPAREN
-
-    LPAREN  shift, and go to state 142
-
-
-state 105
-
-   91 array_type: premitive_type LBRACKET RBRACKET .
-
-    $default  reduce using rule 91 (array_type)
-
-
-state 106
-
-  104 array_indices: LBRACKET . expression RBRACKET
-
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 96
-    simple_expression  go to state 85
-
-
-state 107
-
-   32 variables_declaration: premitive_type variables_init SEMICOLON .
-
-    $default  reduce using rule 32 (variables_declaration)
-
-
-state 108
-
-   35 variables_init: variables_init COMMA . variable_init
-
-    IDENT  shift, and go to state 64
-
-    assignment     go to state 65
-    variable_init  go to state 143
-    array_access   go to state 45
-
-
-state 109
-
-   95 array_declaration: array_type IDENT ASSIGN . array_initialization SEMICOLON
-
-    NEW     shift, and go to state 144
-    LBRACE  shift, and go to state 145
-
-    array_initialization  go to state 146
-
-
-state 110
-
-   94 array_declaration: array_type IDENT SEMICOLON .
-
-    $default  reduce using rule 94 (array_declaration)
-
-
-state 111
-
-   17 instanciation: type_abstract IDENT ASSIGN . creation_object SEMICOLON
-   28 assignment: IDENT ASSIGN . expression
-   29           | IDENT ASSIGN . method_call
-
-    NEW             shift, and go to state 147
-    THIS            shift, and go to state 24
-    SELF            shift, and go to state 25
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 81
-    NUM             shift, and go to state 82
-
-    creation_object     go to state 148
-    sufix_methode_list  go to state 38
-    method_prefix       go to state 39
-    method_call         go to state 83
-    expression          go to state 84
-    simple_expression   go to state 85
-
-
-state 112
-
-   31 variables_declaration: type_abstract variables_init SEMICOLON .
-
-    $default  reduce using rule 31 (variables_declaration)
-
-
-state 113
-
-   30 assignment: array_access ASSIGN expression .
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
+   30 assignment: IDENT ASSIGN expression .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
 
     $default  reduce using rule 30 (assignment)
 
 
+state 89
+
+   76 expression: simple_expression .
+
+    $default  reduce using rule 76 (expression)
+
+
+state 90
+
+   31 assignment: IDENT ASSIGN array_access .
+
+    $default  reduce using rule 31 (assignment)
+
+
+state 91
+
+   95 array_type: IDENT . LBRACKET RBRACKET
+   96 type_abstract: IDENT .
+
+    LBRACKET  shift, and go to state 138
+
+    $default  reduce using rule 96 (type_abstract)
+
+
+state 92
+
+   21 constructor_declaration: IDENT LPAREN params . RPAREN LBRACE constructor_body RBRACE
+
+    RPAREN  shift, and go to state 139
+
+
+state 93
+
+   26 params: param_list .
+   28 param_list: param_list . COMMA param_def
+
+    COMMA  shift, and go to state 140
+
+    $default  reduce using rule 26 (params)
+
+
+state 94
+
+   27 param_list: param_def .
+
+    $default  reduce using rule 27 (param_list)
+
+
+state 95
+
+   29 param_def: types . IDENT
+
+    IDENT  shift, and go to state 141
+
+
+state 96
+
+   82 types: premitive_type .
+   94 array_type: premitive_type . LBRACKET RBRACKET
+
+    LBRACKET  shift, and go to state 67
+
+    $default  reduce using rule 82 (types)
+
+
+state 97
+
+   84 types: array_type .
+
+    $default  reduce using rule 84 (types)
+
+
+state 98
+
+   83 types: type_abstract .
+
+    $default  reduce using rule 83 (types)
+
+
+state 99
+
+   95 array_type: IDENT LBRACKET RBRACKET .
+
+    $default  reduce using rule 95 (array_type)
+
+
+state 100
+
+   79 simple_expression: IDENT .
+
+    $default  reduce using rule 79 (simple_expression)
+
+
+state 101
+
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  107 array_indices: LBRACKET expression . RBRACKET
+
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RBRACKET  shift, and go to state 142
+
+
+state 102
+
+   52 sufix_methode_list: IDENT DOT IDENT .
+
+    $default  reduce using rule 52 (sufix_methode_list)
+
+
+state 103
+
+  108 array_indices: array_indices LBRACKET . expression RBRACKET
+
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 143
+    simple_expression  go to state 89
+
+
+state 104
+
+   51 print_statement: SYSTEM DOT OUT . DOT PRINTLN LPAREN expression RPAREN
+
+    DOT  shift, and go to state 144
+
+
+state 105
+
+   56 method_call: sufix_methode_list LPAREN args . RPAREN
+
+    RPAREN  shift, and go to state 145
+
+
+state 106
+
+   59 args: arg_list .
+   61 arg_list: arg_list . COMMA expression
+
+    COMMA  shift, and go to state 146
+
+    $default  reduce using rule 59 (args)
+
+
+state 107
+
+   60 arg_list: expression .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+
+    $default  reduce using rule 60 (arg_list)
+
+
+state 108
+
+   53 sufix_methode_list: sufix_methode_list DOT IDENT .
+
+    $default  reduce using rule 53 (sufix_methode_list)
+
+
+state 109
+
+   57 method_call: method_prefix DOT IDENT . LPAREN args RPAREN
+
+    LPAREN  shift, and go to state 147
+
+
+state 110
+
+   94 array_type: premitive_type LBRACKET RBRACKET .
+
+    $default  reduce using rule 94 (array_type)
+
+
+state 111
+
+  107 array_indices: LBRACKET . expression RBRACKET
+
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 101
+    simple_expression  go to state 89
+
+
+state 112
+
+   35 variables_declaration: premitive_type variables_init SEMICOLON .
+
+    $default  reduce using rule 35 (variables_declaration)
+
+
+state 113
+
+   38 variables_init: variables_init COMMA . variable_init
+
+    IDENT  shift, and go to state 68
+
+    assignment     go to state 69
+    variable_init  go to state 148
+    array_access   go to state 47
+
+
 state 114
 
-   34 constantes_declaration: FINAL premitive_type constantes_init SEMICOLON .
+   98 array_declaration: array_type IDENT ASSIGN . array_initialization SEMICOLON
 
-    $default  reduce using rule 34 (constantes_declaration)
+    NEW     shift, and go to state 149
+    LBRACE  shift, and go to state 150
+
+    array_initialization  go to state 151
 
 
 state 115
 
-   37 constantes_init: constantes_init COMMA . ASSIGN
+   97 array_declaration: array_type IDENT SEMICOLON .
 
-    ASSIGN  shift, and go to state 149
+    $default  reduce using rule 97 (array_declaration)
 
 
 state 116
 
-   33 constantes_declaration: FINAL type_abstract constantes_init SEMICOLON .
+   19 instanciation: type_abstract IDENT ASSIGN . creation_object SEMICOLON
+   30 assignment: IDENT ASSIGN . expression
+   31           | IDENT ASSIGN . array_access
+   32           | IDENT ASSIGN . method_call
 
-    $default  reduce using rule 33 (constantes_declaration)
+    NEW             shift, and go to state 152
+    THIS            shift, and go to state 25
+    SELF            shift, and go to state 26
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 85
+    NUM             shift, and go to state 86
+
+    creation_object     go to state 153
+    sufix_methode_list  go to state 40
+    method_prefix       go to state 41
+    method_call         go to state 87
+    expression          go to state 88
+    simple_expression   go to state 89
+    array_access        go to state 90
 
 
 state 117
 
-   74 simple_expression: NOT simple_expression .
+   34 variables_declaration: type_abstract variables_init SEMICOLON .
 
-    $default  reduce using rule 74 (simple_expression)
+    $default  reduce using rule 34 (variables_declaration)
 
 
 state 118
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-   72           | MINUS expression .
+   33 assignment: array_access ASSIGN expression .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
 
-    $default  reduce using rule 72 (expression)
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+
+    $default  reduce using rule 33 (assignment)
 
 
 state 119
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-   75 simple_expression: LPAREN expression . RPAREN
+   37 constantes_declaration: FINAL premitive_type constantes_init SEMICOLON .
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RPAREN    shift, and go to state 150
+    $default  reduce using rule 37 (constantes_declaration)
 
 
 state 120
 
-   64 expression: expression EQ . simple_expression
+   40 constantes_init: constantes_init COMMA . assignment
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    IDENT  shift, and go to state 76
 
-    simple_expression  go to state 151
+    assignment    go to state 154
+    array_access  go to state 47
 
 
 state 121
 
-   65 expression: expression NEQ . simple_expression
+   36 constantes_declaration: FINAL type_abstract constantes_init SEMICOLON .
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    simple_expression  go to state 152
+    $default  reduce using rule 36 (constantes_declaration)
 
 
 state 122
 
-   66 expression: expression LT . simple_expression
+   77 simple_expression: NOT simple_expression .
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    simple_expression  go to state 153
+    $default  reduce using rule 77 (simple_expression)
 
 
 state 123
 
-   67 expression: expression GT . simple_expression
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+   75           | MINUS expression .
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    simple_expression  go to state 154
+    $default  reduce using rule 75 (expression)
 
 
 state 124
 
-   68 expression: expression LTE . simple_expression
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+   78 simple_expression: LPAREN expression . RPAREN
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    simple_expression  go to state 155
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RPAREN    shift, and go to state 155
 
 
 state 125
 
-   69 expression: expression GTE . simple_expression
+   67 expression: expression EQ . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 156
 
 
 state 126
 
-   70 expression: expression AND . simple_expression
+   68 expression: expression NEQ . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 157
 
 
 state 127
 
-   71 expression: expression OR . simple_expression
+   69 expression: expression LT . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 158
 
 
 state 128
 
-   59 expression: expression PLUS . simple_expression
+   70 expression: expression GT . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 159
 
 
 state 129
 
-   60 expression: expression MINUS . simple_expression
+   71 expression: expression LTE . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 160
 
 
 state 130
 
-   61 expression: expression MULTIPLY . simple_expression
+   72 expression: expression GTE . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 161
 
 
 state 131
 
-   62 expression: expression DIVIDE . simple_expression
+   73 expression: expression AND . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 162
 
 
 state 132
 
-   63 expression: expression MOD . simple_expression
+   74 expression: expression OR . simple_expression
 
-    NOT             shift, and go to state 77
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
     simple_expression  go to state 163
 
 
 state 133
 
-   92 array_type: IDENT LBRACKET . RBRACKET
+   62 expression: expression PLUS . simple_expression
 
-    RBRACKET  shift, and go to state 94
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    simple_expression  go to state 164
 
 
 state 134
 
-   19 constructor_declaration: IDENT LPAREN params RPAREN . LBRACE constructor_body RBRACE
+   63 expression: expression MINUS . simple_expression
 
-    LBRACE  shift, and go to state 164
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    simple_expression  go to state 165
 
 
 state 135
 
-   26 param_list: param_list COMMA . param_def
+   64 expression: expression MULTIPLY . simple_expression
 
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    IDENT    shift, and go to state 86
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
-    param_def       go to state 165
-    types           go to state 90
-    premitive_type  go to state 91
-    array_type      go to state 92
-    type_abstract   go to state 93
+    simple_expression  go to state 166
 
 
 state 136
 
-   27 param_def: types IDENT .
+   65 expression: expression DIVIDE . simple_expression
 
-    $default  reduce using rule 27 (param_def)
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    simple_expression  go to state 167
 
 
 state 137
 
-  104 array_indices: LBRACKET expression RBRACKET .
+   66 expression: expression MOD . simple_expression
 
-    $default  reduce using rule 104 (array_indices)
+    NOT             shift, and go to state 81
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    simple_expression  go to state 168
 
 
 state 138
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-  105 array_indices: array_indices LBRACKET expression . RBRACKET
+   95 array_type: IDENT LBRACKET . RBRACKET
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RBRACKET  shift, and go to state 166
+    RBRACKET  shift, and go to state 99
 
 
 state 139
 
-   48 print_statement: SYSTEM DOT OUT DOT . PRINTLN LPAREN expression RPAREN
+   21 constructor_declaration: IDENT LPAREN params RPAREN . LBRACE constructor_body RBRACE
 
-    PRINTLN  shift, and go to state 167
+    LBRACE  shift, and go to state 169
 
 
 state 140
 
-   53 method_call: sufix_methode_list LPAREN args RPAREN .
+   28 param_list: param_list COMMA . param_def
 
-    $default  reduce using rule 53 (method_call)
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    IDENT    shift, and go to state 91
+
+    param_def       go to state 170
+    types           go to state 95
+    premitive_type  go to state 96
+    array_type      go to state 97
+    type_abstract   go to state 98
 
 
 state 141
 
-   58 arg_list: arg_list COMMA . expression
+   29 param_def: types IDENT .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 168
-    simple_expression  go to state 85
+    $default  reduce using rule 29 (param_def)
 
 
 state 142
 
-   54 method_call: method_prefix DOT IDENT LPAREN . args RPAREN
+  107 array_indices: LBRACKET expression RBRACKET .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    $default  reduce using rule 55 (args)
-
-    args               go to state 169
-    arg_list           go to state 101
-    expression         go to state 102
-    simple_expression  go to state 85
+    $default  reduce using rule 107 (array_indices)
 
 
 state 143
 
-   35 variables_init: variables_init COMMA variable_init .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  108 array_indices: array_indices LBRACKET expression . RBRACKET
 
-    $default  reduce using rule 35 (variables_init)
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RBRACKET  shift, and go to state 171
 
 
 state 144
 
-   96 array_initialization: NEW . type_abstract array_dimensions
-   97                     | NEW . premitive_type array_dimensions
+   51 print_statement: SYSTEM DOT OUT DOT . PRINTLN LPAREN expression RPAREN
 
-    BOOLEAN  shift, and go to state 14
-    CHAR     shift, and go to state 15
-    DOUBLE   shift, and go to state 16
-    FLOAT    shift, and go to state 17
-    INT      shift, and go to state 19
-    STRING   shift, and go to state 20
-    LONG     shift, and go to state 21
-    VOID     shift, and go to state 22
-    SHORT    shift, and go to state 23
-    IDENT    shift, and go to state 46
-
-    premitive_type  go to state 170
-    type_abstract   go to state 171
+    PRINTLN  shift, and go to state 172
 
 
 state 145
 
-   98 array_initialization: LBRACE . array_elements RBRACE
+   56 method_call: sufix_methode_list LPAREN args RPAREN .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 172
-    simple_expression  go to state 85
-    array_elements     go to state 173
+    $default  reduce using rule 56 (method_call)
 
 
 state 146
 
-   95 array_declaration: array_type IDENT ASSIGN array_initialization . SEMICOLON
+   61 arg_list: arg_list COMMA . expression
 
-    SEMICOLON  shift, and go to state 174
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 173
+    simple_expression  go to state 89
 
 
 state 147
 
-   18 creation_object: NEW . IDENT LPAREN args RPAREN
+   57 method_call: method_prefix DOT IDENT LPAREN . args RPAREN
 
-    IDENT  shift, and go to state 175
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    $default  reduce using rule 58 (args)
+
+    args               go to state 174
+    arg_list           go to state 106
+    expression         go to state 107
+    simple_expression  go to state 89
 
 
 state 148
 
-   17 instanciation: type_abstract IDENT ASSIGN creation_object . SEMICOLON
+   38 variables_init: variables_init COMMA variable_init .
 
-    SEMICOLON  shift, and go to state 176
+    $default  reduce using rule 38 (variables_init)
 
 
 state 149
 
-   37 constantes_init: constantes_init COMMA ASSIGN .
+   99 array_initialization: NEW . type_abstract array_dimensions
+  100                     | NEW . premitive_type array_dimensions
 
-    $default  reduce using rule 37 (constantes_init)
+    BOOLEAN  shift, and go to state 15
+    CHAR     shift, and go to state 16
+    DOUBLE   shift, and go to state 17
+    FLOAT    shift, and go to state 18
+    INT      shift, and go to state 20
+    STRING   shift, and go to state 21
+    LONG     shift, and go to state 22
+    VOID     shift, and go to state 23
+    SHORT    shift, and go to state 24
+    IDENT    shift, and go to state 48
+
+    premitive_type  go to state 175
+    type_abstract   go to state 176
 
 
 state 150
 
-   75 simple_expression: LPAREN expression RPAREN .
+  101 array_initialization: LBRACE . array_elements RBRACE
 
-    $default  reduce using rule 75 (simple_expression)
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 177
+    simple_expression  go to state 89
+    array_elements     go to state 178
 
 
 state 151
 
-   64 expression: expression EQ simple_expression .
+   98 array_declaration: array_type IDENT ASSIGN array_initialization . SEMICOLON
 
-    $default  reduce using rule 64 (expression)
+    SEMICOLON  shift, and go to state 179
 
 
 state 152
 
-   65 expression: expression NEQ simple_expression .
+   20 creation_object: NEW . IDENT LPAREN args RPAREN
 
-    $default  reduce using rule 65 (expression)
+    IDENT  shift, and go to state 180
 
 
 state 153
 
-   66 expression: expression LT simple_expression .
+   19 instanciation: type_abstract IDENT ASSIGN creation_object . SEMICOLON
 
-    $default  reduce using rule 66 (expression)
+    SEMICOLON  shift, and go to state 181
 
 
 state 154
 
-   67 expression: expression GT simple_expression .
+   40 constantes_init: constantes_init COMMA assignment .
 
-    $default  reduce using rule 67 (expression)
+    $default  reduce using rule 40 (constantes_init)
 
 
 state 155
 
-   68 expression: expression LTE simple_expression .
+   78 simple_expression: LPAREN expression RPAREN .
 
-    $default  reduce using rule 68 (expression)
+    $default  reduce using rule 78 (simple_expression)
 
 
 state 156
 
-   69 expression: expression GTE simple_expression .
+   67 expression: expression EQ simple_expression .
 
-    $default  reduce using rule 69 (expression)
+    $default  reduce using rule 67 (expression)
 
 
 state 157
 
-   70 expression: expression AND simple_expression .
+   68 expression: expression NEQ simple_expression .
 
-    $default  reduce using rule 70 (expression)
+    $default  reduce using rule 68 (expression)
 
 
 state 158
 
-   71 expression: expression OR simple_expression .
+   69 expression: expression LT simple_expression .
 
-    $default  reduce using rule 71 (expression)
+    $default  reduce using rule 69 (expression)
 
 
 state 159
 
-   59 expression: expression PLUS simple_expression .
+   70 expression: expression GT simple_expression .
 
-    $default  reduce using rule 59 (expression)
+    $default  reduce using rule 70 (expression)
 
 
 state 160
 
-   60 expression: expression MINUS simple_expression .
+   71 expression: expression LTE simple_expression .
 
-    $default  reduce using rule 60 (expression)
+    $default  reduce using rule 71 (expression)
 
 
 state 161
 
-   61 expression: expression MULTIPLY simple_expression .
+   72 expression: expression GTE simple_expression .
 
-    $default  reduce using rule 61 (expression)
+    $default  reduce using rule 72 (expression)
 
 
 state 162
 
-   62 expression: expression DIVIDE simple_expression .
+   73 expression: expression AND simple_expression .
 
-    $default  reduce using rule 62 (expression)
+    $default  reduce using rule 73 (expression)
 
 
 state 163
 
-   63 expression: expression MOD simple_expression .
+   74 expression: expression OR simple_expression .
 
-    $default  reduce using rule 63 (expression)
+    $default  reduce using rule 74 (expression)
 
 
 state 164
 
-   19 constructor_declaration: IDENT LPAREN params RPAREN LBRACE . constructor_body RBRACE
+   62 expression: expression PLUS simple_expression .
 
-    $default  reduce using rule 20 (constructor_body)
-
-    constructor_body  go to state 177
+    $default  reduce using rule 62 (expression)
 
 
 state 165
 
-   26 param_list: param_list COMMA param_def .
+   63 expression: expression MINUS simple_expression .
 
-    $default  reduce using rule 26 (param_list)
+    $default  reduce using rule 63 (expression)
 
 
 state 166
 
-  105 array_indices: array_indices LBRACKET expression RBRACKET .
+   64 expression: expression MULTIPLY simple_expression .
 
-    $default  reduce using rule 105 (array_indices)
+    $default  reduce using rule 64 (expression)
 
 
 state 167
 
-   48 print_statement: SYSTEM DOT OUT DOT PRINTLN . LPAREN expression RPAREN
+   65 expression: expression DIVIDE simple_expression .
 
-    LPAREN  shift, and go to state 178
+    $default  reduce using rule 65 (expression)
 
 
 state 168
 
-   58 arg_list: arg_list COMMA expression .
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
+   66 expression: expression MOD simple_expression .
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-
-    $default  reduce using rule 58 (arg_list)
+    $default  reduce using rule 66 (expression)
 
 
 state 169
 
-   54 method_call: method_prefix DOT IDENT LPAREN args . RPAREN
+   21 constructor_declaration: IDENT LPAREN params RPAREN LBRACE . constructor_body RBRACE
 
-    RPAREN  shift, and go to state 179
+    $default  reduce using rule 22 (constructor_body)
+
+    constructor_body  go to state 182
 
 
 state 170
 
-   97 array_initialization: NEW premitive_type . array_dimensions
+   28 param_list: param_list COMMA param_def .
 
-    LBRACKET  shift, and go to state 180
-
-    array_dimensions  go to state 181
+    $default  reduce using rule 28 (param_list)
 
 
 state 171
 
-   96 array_initialization: NEW type_abstract . array_dimensions
+  108 array_indices: array_indices LBRACKET expression RBRACKET .
 
-    LBRACKET  shift, and go to state 180
-
-    array_dimensions  go to state 182
+    $default  reduce using rule 108 (array_indices)
 
 
 state 172
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-  101 array_elements: expression .
+   51 print_statement: SYSTEM DOT OUT DOT PRINTLN . LPAREN expression RPAREN
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-
-    $default  reduce using rule 101 (array_elements)
+    LPAREN  shift, and go to state 183
 
 
 state 173
 
-   98 array_initialization: LBRACE array_elements . RBRACE
-  102 array_elements: array_elements . COMMA expression
+   61 arg_list: arg_list COMMA expression .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
 
-    RBRACE  shift, and go to state 183
-    COMMA   shift, and go to state 184
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+
+    $default  reduce using rule 61 (arg_list)
 
 
 state 174
 
-   95 array_declaration: array_type IDENT ASSIGN array_initialization SEMICOLON .
+   57 method_call: method_prefix DOT IDENT LPAREN args . RPAREN
 
-    $default  reduce using rule 95 (array_declaration)
+    RPAREN  shift, and go to state 184
 
 
 state 175
 
-   18 creation_object: NEW IDENT . LPAREN args RPAREN
+  100 array_initialization: NEW premitive_type . array_dimensions
 
-    LPAREN  shift, and go to state 185
+    LBRACKET  shift, and go to state 185
+
+    array_dimensions  go to state 186
 
 
 state 176
 
-   17 instanciation: type_abstract IDENT ASSIGN creation_object SEMICOLON .
+   99 array_initialization: NEW type_abstract . array_dimensions
 
-    $default  reduce using rule 17 (instanciation)
+    LBRACKET  shift, and go to state 185
+
+    array_dimensions  go to state 187
 
 
 state 177
 
-   19 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body . RBRACE
-   21 constructor_body: constructor_body . constructor_assignment SEMICOLON
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  104 array_elements: expression .
 
-    THIS    shift, and go to state 186
-    RBRACE  shift, and go to state 187
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
 
-    constructor_assignment  go to state 188
+    $default  reduce using rule 104 (array_elements)
 
 
 state 178
 
-   48 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN . expression RPAREN
+  101 array_initialization: LBRACE array_elements . RBRACE
+  105 array_elements: array_elements . COMMA expression
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 189
-    simple_expression  go to state 85
+    RBRACE  shift, and go to state 188
+    COMMA   shift, and go to state 189
 
 
 state 179
 
-   54 method_call: method_prefix DOT IDENT LPAREN args RPAREN .
+   98 array_declaration: array_type IDENT ASSIGN array_initialization SEMICOLON .
 
-    $default  reduce using rule 54 (method_call)
+    $default  reduce using rule 98 (array_declaration)
 
 
 state 180
 
-   99 array_dimensions: LBRACKET . expression RBRACKET
+   20 creation_object: NEW IDENT . LPAREN args RPAREN
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 190
-    simple_expression  go to state 85
+    LPAREN  shift, and go to state 190
 
 
 state 181
 
-   97 array_initialization: NEW premitive_type array_dimensions .
-  100 array_dimensions: array_dimensions . LBRACKET expression RBRACKET
+   19 instanciation: type_abstract IDENT ASSIGN creation_object SEMICOLON .
 
-    LBRACKET  shift, and go to state 191
-
-    $default  reduce using rule 97 (array_initialization)
+    $default  reduce using rule 19 (instanciation)
 
 
 state 182
 
-   96 array_initialization: NEW type_abstract array_dimensions .
-  100 array_dimensions: array_dimensions . LBRACKET expression RBRACKET
+   21 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body . RBRACE
+   23 constructor_body: constructor_body . constructor_assignment SEMICOLON
 
-    LBRACKET  shift, and go to state 191
+    THIS    shift, and go to state 191
+    RBRACE  shift, and go to state 192
 
-    $default  reduce using rule 96 (array_initialization)
+    constructor_assignment  go to state 193
 
 
 state 183
 
-   98 array_initialization: LBRACE array_elements RBRACE .
+   51 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN . expression RPAREN
 
-    $default  reduce using rule 98 (array_initialization)
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 194
+    simple_expression  go to state 89
 
 
 state 184
 
-  102 array_elements: array_elements COMMA . expression
+   57 method_call: method_prefix DOT IDENT LPAREN args RPAREN .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 192
-    simple_expression  go to state 85
+    $default  reduce using rule 57 (method_call)
 
 
 state 185
 
-   18 creation_object: NEW IDENT LPAREN . args RPAREN
+  102 array_dimensions: LBRACKET . expression RBRACKET
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
 
-    $default  reduce using rule 55 (args)
-
-    args               go to state 193
-    arg_list           go to state 101
-    expression         go to state 102
-    simple_expression  go to state 85
+    expression         go to state 195
+    simple_expression  go to state 89
 
 
 state 186
 
-   22 constructor_assignment: THIS . DOT IDENT ASSIGN expression
+  100 array_initialization: NEW premitive_type array_dimensions .
+  103 array_dimensions: array_dimensions . LBRACKET expression RBRACKET
 
-    DOT  shift, and go to state 194
+    LBRACKET  shift, and go to state 196
+
+    $default  reduce using rule 100 (array_initialization)
 
 
 state 187
 
-   19 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body RBRACE .
+   99 array_initialization: NEW type_abstract array_dimensions .
+  103 array_dimensions: array_dimensions . LBRACKET expression RBRACKET
 
-    $default  reduce using rule 19 (constructor_declaration)
+    LBRACKET  shift, and go to state 196
+
+    $default  reduce using rule 99 (array_initialization)
 
 
 state 188
 
-   21 constructor_body: constructor_body constructor_assignment . SEMICOLON
+  101 array_initialization: LBRACE array_elements RBRACE .
 
-    SEMICOLON  shift, and go to state 195
+    $default  reduce using rule 101 (array_initialization)
 
 
 state 189
 
-   48 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression . RPAREN
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
+  105 array_elements: array_elements COMMA . expression
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RPAREN    shift, and go to state 196
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 197
+    simple_expression  go to state 89
 
 
 state 190
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-   99 array_dimensions: LBRACKET expression . RBRACKET
+   20 creation_object: NEW IDENT LPAREN . args RPAREN
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RBRACKET  shift, and go to state 197
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    $default  reduce using rule 58 (args)
+
+    args               go to state 198
+    arg_list           go to state 106
+    expression         go to state 107
+    simple_expression  go to state 89
 
 
 state 191
 
-  100 array_dimensions: array_dimensions LBRACKET . expression RBRACKET
+   24 constructor_assignment: THIS . DOT IDENT ASSIGN expression
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 198
-    simple_expression  go to state 85
+    DOT  shift, and go to state 199
 
 
 state 192
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-  102 array_elements: array_elements COMMA expression .
+   21 constructor_declaration: IDENT LPAREN params RPAREN LBRACE constructor_body RBRACE .
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-
-    $default  reduce using rule 102 (array_elements)
+    $default  reduce using rule 21 (constructor_declaration)
 
 
 state 193
 
-   18 creation_object: NEW IDENT LPAREN args . RPAREN
+   23 constructor_body: constructor_body constructor_assignment . SEMICOLON
 
-    RPAREN  shift, and go to state 199
+    SEMICOLON  shift, and go to state 200
 
 
 state 194
 
-   22 constructor_assignment: THIS DOT . IDENT ASSIGN expression
+   51 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression . RPAREN
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
 
-    IDENT  shift, and go to state 200
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RPAREN    shift, and go to state 201
 
 
 state 195
 
-   21 constructor_body: constructor_body constructor_assignment SEMICOLON .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  102 array_dimensions: LBRACKET expression . RBRACKET
 
-    $default  reduce using rule 21 (constructor_body)
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RBRACKET  shift, and go to state 202
 
 
 state 196
 
-   48 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression RPAREN .
+  103 array_dimensions: array_dimensions LBRACKET . expression RBRACKET
 
-    $default  reduce using rule 48 (print_statement)
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 203
+    simple_expression  go to state 89
 
 
 state 197
 
-   99 array_dimensions: LBRACKET expression RBRACKET .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  105 array_elements: array_elements COMMA expression .
 
-    $default  reduce using rule 99 (array_dimensions)
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+
+    $default  reduce using rule 105 (array_elements)
 
 
 state 198
 
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
-  100 array_dimensions: array_dimensions LBRACKET expression . RBRACKET
+   20 creation_object: NEW IDENT LPAREN args . RPAREN
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
-    RBRACKET  shift, and go to state 201
+    RPAREN  shift, and go to state 204
 
 
 state 199
 
-   18 creation_object: NEW IDENT LPAREN args RPAREN .
+   24 constructor_assignment: THIS DOT . IDENT ASSIGN expression
 
-    $default  reduce using rule 18 (creation_object)
+    IDENT  shift, and go to state 205
 
 
 state 200
 
-   22 constructor_assignment: THIS DOT IDENT . ASSIGN expression
+   23 constructor_body: constructor_body constructor_assignment SEMICOLON .
 
-    ASSIGN  shift, and go to state 202
+    $default  reduce using rule 23 (constructor_body)
 
 
 state 201
 
-  100 array_dimensions: array_dimensions LBRACKET expression RBRACKET .
+   51 print_statement: SYSTEM DOT OUT DOT PRINTLN LPAREN expression RPAREN .
 
-    $default  reduce using rule 100 (array_dimensions)
+    $default  reduce using rule 51 (print_statement)
 
 
 state 202
 
-   22 constructor_assignment: THIS DOT IDENT ASSIGN . expression
+  102 array_dimensions: LBRACKET expression RBRACKET .
 
-    NOT             shift, and go to state 77
-    MINUS           shift, and go to state 78
-    STRING_LITERAL  shift, and go to state 79
-    LPAREN          shift, and go to state 80
-    IDENT           shift, and go to state 95
-    NUM             shift, and go to state 82
-
-    expression         go to state 203
-    simple_expression  go to state 85
+    $default  reduce using rule 102 (array_dimensions)
 
 
 state 203
 
-   22 constructor_assignment: THIS DOT IDENT ASSIGN expression .
-   59 expression: expression . PLUS simple_expression
-   60           | expression . MINUS simple_expression
-   61           | expression . MULTIPLY simple_expression
-   62           | expression . DIVIDE simple_expression
-   63           | expression . MOD simple_expression
-   64           | expression . EQ simple_expression
-   65           | expression . NEQ simple_expression
-   66           | expression . LT simple_expression
-   67           | expression . GT simple_expression
-   68           | expression . LTE simple_expression
-   69           | expression . GTE simple_expression
-   70           | expression . AND simple_expression
-   71           | expression . OR simple_expression
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+  103 array_dimensions: array_dimensions LBRACKET expression . RBRACKET
 
-    EQ        shift, and go to state 120
-    NEQ       shift, and go to state 121
-    LT        shift, and go to state 122
-    GT        shift, and go to state 123
-    LTE       shift, and go to state 124
-    GTE       shift, and go to state 125
-    AND       shift, and go to state 126
-    OR        shift, and go to state 127
-    PLUS      shift, and go to state 128
-    MINUS     shift, and go to state 129
-    MULTIPLY  shift, and go to state 130
-    DIVIDE    shift, and go to state 131
-    MOD       shift, and go to state 132
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+    RBRACKET  shift, and go to state 206
 
-    $default  reduce using rule 22 (constructor_assignment)
+
+state 204
+
+   20 creation_object: NEW IDENT LPAREN args RPAREN .
+
+    $default  reduce using rule 20 (creation_object)
+
+
+state 205
+
+   24 constructor_assignment: THIS DOT IDENT . ASSIGN expression
+
+    ASSIGN  shift, and go to state 207
+
+
+state 206
+
+  103 array_dimensions: array_dimensions LBRACKET expression RBRACKET .
+
+    $default  reduce using rule 103 (array_dimensions)
+
+
+state 207
+
+   24 constructor_assignment: THIS DOT IDENT ASSIGN . expression
+
+    NOT             shift, and go to state 81
+    MINUS           shift, and go to state 82
+    STRING_LITERAL  shift, and go to state 83
+    LPAREN          shift, and go to state 84
+    IDENT           shift, and go to state 100
+    NUM             shift, and go to state 86
+
+    expression         go to state 208
+    simple_expression  go to state 89
+
+
+state 208
+
+   24 constructor_assignment: THIS DOT IDENT ASSIGN expression .
+   62 expression: expression . PLUS simple_expression
+   63           | expression . MINUS simple_expression
+   64           | expression . MULTIPLY simple_expression
+   65           | expression . DIVIDE simple_expression
+   66           | expression . MOD simple_expression
+   67           | expression . EQ simple_expression
+   68           | expression . NEQ simple_expression
+   69           | expression . LT simple_expression
+   70           | expression . GT simple_expression
+   71           | expression . LTE simple_expression
+   72           | expression . GTE simple_expression
+   73           | expression . AND simple_expression
+   74           | expression . OR simple_expression
+
+    EQ        shift, and go to state 125
+    NEQ       shift, and go to state 126
+    LT        shift, and go to state 127
+    GT        shift, and go to state 128
+    LTE       shift, and go to state 129
+    GTE       shift, and go to state 130
+    AND       shift, and go to state 131
+    OR        shift, and go to state 132
+    PLUS      shift, and go to state 133
+    MINUS     shift, and go to state 134
+    MULTIPLY  shift, and go to state 135
+    DIVIDE    shift, and go to state 136
+    MOD       shift, and go to state 137
+
+    $default  reduce using rule 24 (constructor_assignment)
