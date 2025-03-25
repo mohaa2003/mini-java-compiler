@@ -1,27 +1,27 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include "ts.h"
     int nb_ligne = 1;
-    extern int yylex();
-    extern int yyparse();
-    extern FILE* yyin;
-    void yyerror(const char* msg);
 %}
 
-/* Déclaration des tokens (doit correspondre à lex.l) */
-%token ABSTRACT ASSERT BOOLEAN BREAK BYTE CASE CATCH CHAR CLASS CONST CONTINUE
-%token DEFAULT DO DOUBLE ELSE ENUM EXTENDS FINAL FINALLY FLOAT FOR IF IMPLEMENTS
-%token IMPORT INSTANCEOF INT STRING INTERFACE LONG NATIVE NEW PACKAGE PRIVATE PROTECTED
-%token PUBLIC RETURN SHORT STATIC STRICTFP SUPER SWITCH SYNCHRONIZED THIS THROW
-%token COLON QUESTION ARROW DOUBLE_COLON INCREMENT DECREMENT
-%token THROWS TRANSIENT TRY VOID VOLATILE WHILE
+%union{
+int integer;
+char* str;
+}
+
+/* Déclaration des tokens (correspond à lex.l) */
+%token BOOLEAN CHAR CLASS
+%token DOUBLE FLOAT FINAL
+%token INT STRING LONG PRIVATE PROTECTED VOID
+%token PUBLIC SHORT STATIC NEW THIS SELF RETURN
 %token ASSIGN EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET SEMICOLON COMMA DOT
 %token IDENT NUM
 %token SYSTEM OUT PRINTLN
 
-%left ELSE
+/* %left ELSE */
 %left ASSIGN
 %left OR
 %left AND
@@ -30,61 +30,51 @@
 %left PLUS MINUS
 %left MULTIPLY DIVIDE MOD
 %right NOT
-
-%start program
-
+%right UMINUS
 %%
-
-program:
-    import_list class_declaration_list
-    ;
-
-import_list:
-    /* Vide */
-    | import_list import_statement
-    ;
-
-import_statement:
-    IMPORT import_expression import_type SEMICOLON
-    ;
-
-import_expression:
-    /* Vide */
-    | import_expression IDENT DOT
-    ;
-
-import_type:
-    IDENT | MULTIPLY
-    ;
+/* si je decide de remettre list_import je dois mettre un nouveau axiome (program) */
 
 class_declaration_list:
     class_declaration | class_declaration_list class_declaration
+    {printf("Syntaxe correcte !\n");
+    YYACCEPT;}
     ;
 
 class_declaration:
-    class_type CLASS IDENT LBRACE class_body RBRACE
+    modificator class_type CLASS IDENT LBRACE class_body RBRACE
+    ;
+
+modificator:
+    PRIVATE |
+    PUBLIC |
+    PROTECTED |
     ;
 
 class_type:
-    ABSTRACT | INTERFACE |
+    STATIC | 
     ;
 
 class_body:
     /* Vide */
-    | class_body core_body
+    | core_body
     ;
 
 core_body:
-    statement | method_declaration | constructor_declaration | instanciation
+    statement | /*method_declaration |*/ constructor_declaration
+    | LBRACE core_body_list RBRACE
+    ;
+
+core_body_list:
+    /* Vide */
+    | core_body_list core_body
     ;
 
 instanciation:
-    type IDENT ASSIGN creation_object SEMICOLON
+    type_abstract IDENT ASSIGN creation_object SEMICOLON
     ;
 
 creation_object:
     NEW IDENT LPAREN args RPAREN
-    | IDENT LPAREN args RPAREN
     ;
 
 constructor_declaration:
@@ -100,17 +90,13 @@ constructor_assignment:
     THIS DOT IDENT ASSIGN expression
     ;
 
-method_declaration:
-    method_abs_declaration
-    | type IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
-    | method_modifiers type IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
-    ;
+/* method_declaration:
+    types IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
+    | method_modifiers types IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
+    ; */
 
-method_abs_declaration:
-    ABSTRACT type IDENT LPAREN params RPAREN SEMICOLON 
-    ;
 
-method_modifiers:
+/* method_modifiers:
     method_modifier_list
     ;
 
@@ -120,7 +106,7 @@ method_modifier_list:
 
 method_modifier:
     STATIC | FINAL | SYNCHRONIZED
-    ;
+    ; */
 
 
 params:
@@ -133,19 +119,38 @@ param_list:
     ;
 
 param_def:
-    type IDENT | type LBRACKET RBRACKET IDENT
+    types IDENT
+    ;
 
 assignment:
-    IDENT ASSIGN expression | IDENT ASSIGN method_call | array_access ASSIGN expression 
+    IDENT ASSIGN expression | IDENT ASSIGN method_call | array_access ASSIGN expression
     ;
 
-variable_declaration:
-    type variable_init SEMICOLON
+variables_declaration:
+    type_abstract variables_init SEMICOLON
+    | premitive_type variables_init SEMICOLON
     ;
 
-variable_declaration_for:
-    type variable_init
+
+constantes_declaration:
+    FINAL type_abstract constantes_init SEMICOLON
+    | FINAL premitive_type constantes_init SEMICOLON
     ;
+
+/* variable_declaration_for:
+    premitive_type variable_init                  //mal compris !
+    | type_abstract variable_init                  //mal compris !
+    ; */
+
+variables_init:
+    variables_init COMMA variable_init
+    | variable_init
+    ;
+
+constantes_init:
+    constantes_init COMMA ASSIGN
+    | ASSIGN
+;
 
 variable_init:
     IDENT | assignment
@@ -154,16 +159,18 @@ variable_init:
 statement:
     assignment SEMICOLON
     | array_declaration
-    | variable_declaration
-    | if_statement
+    | variables_declaration
+    | constantes_declaration
+    /* | if_statement
     | while_statement
-    | for_statement
+    | for_statement */
     | return_statement SEMICOLON
     | print_statement SEMICOLON
+    //method declaration ??
     | method_call SEMICOLON
     | instanciation
     | creation_object
-    | constructor_assignment SEMICOLON
+    /* | constructor_assignment SEMICOLON */
     
     ;
 
@@ -173,12 +180,19 @@ print_statement:
 
 
 sufix_methode_list:
-    IDENT DOT | sufix_methode_list IDENT DOT
+    IDENT DOT IDENT  // obj.method
+    | sufix_methode_list DOT IDENT  // obj.method.subMethod
+;
+
+method_prefix:
+    THIS | SELF
 ;
 
 method_call:
-    IDENT LPAREN args RPAREN | sufix_methode_list IDENT LPAREN args RPAREN
-;
+    sufix_methode_list LPAREN args RPAREN
+    | method_prefix DOT IDENT LPAREN args RPAREN  // la grammaire exige q'une methode sera prefixe, ex: this.method(), self.method()
+;                                                 // pour eviter le conflit avec la declaration des constructeurs
+
 
 args:
     /* Vide */
@@ -189,16 +203,16 @@ arg_list:
     expression | arg_list COMMA expression
     ;
 
-if_statement:
+/* if_statement:
     IF LPAREN expression RPAREN LBRACE statement_list RBRACE optional_else
-    ;
+    ; */
 
-optional_else:
-    /* Vide */  
+/* optional_else: 
     | ELSE LBRACE statement_list RBRACE  
-    ;
+    ; 
+    */
 
-while_statement:
+/* while_statement:
     WHILE LPAREN expression RPAREN LBRACE statement_list RBRACE
     ;
 
@@ -208,39 +222,38 @@ for_statement:
     ;
 
 foreach_statement:
-    FOR LPAREN type IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
-    ;
+    FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
+    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
+    ; */
 
 return_statement:
     RETURN expression
     |RETURN creation_object
     ;
 
-statement_list:
-    /* Vide */
+/* statement_list:
+    // Vide
     | statement_list statement
-    ;
+    ; */
 
 expression:
-    simple_expression expression_prime
-    ;
+    expression PLUS simple_expression
+    | expression MINUS simple_expression
+    | expression MULTIPLY simple_expression
+    | expression DIVIDE simple_expression
+    | expression MOD simple_expression
+    | expression EQ simple_expression
+    | expression NEQ simple_expression
+    | expression LT simple_expression
+    | expression GT simple_expression
+    | expression LTE simple_expression
+    | expression GTE simple_expression
+    | expression AND simple_expression
+    | expression OR simple_expression
+    | MINUS expression %prec UMINUS
+    | simple_expression
+;
 
-expression_prime:
-    /* Vide */
-    | PLUS simple_expression expression_prime
-    | MINUS simple_expression expression_prime
-    | MULTIPLY simple_expression expression_prime
-    | DIVIDE simple_expression expression_prime
-    | MOD simple_expression expression_prime
-    | EQ simple_expression expression_prime
-    | NEQ simple_expression expression_prime
-    | LT simple_expression expression_prime
-    | GT simple_expression expression_prime
-    | LTE simple_expression expression_prime
-    | GTE simple_expression expression_prime
-    | AND simple_expression expression_prime
-    | OR simple_expression expression_prime
-    ;
 
 simple_expression:
     NOT simple_expression
@@ -248,20 +261,35 @@ simple_expression:
     | IDENT
     | NUM
     | STRING_LITERAL
-    | instanciation
     ;
 
-type:
-    INT | FLOAT | BOOLEAN | CHAR | DOUBLE | VOID | STRING | IDENT | type LBRACKET RBRACKET
-    ;
+types:
+    premitive_type | type_abstract | array_type
+;
+
+premitive_type:
+    INT | FLOAT | BOOLEAN | CHAR | DOUBLE | VOID | STRING | LONG | SHORT
+;
+
+array_type:
+    premitive_type LBRACKET RBRACKET
+    | IDENT /*type abstract , je l'ai pas mentionne pour eviter le conflit !*/ LBRACKET RBRACKET
+;
+
+type_abstract:
+    IDENT
+;
+
+
 
 array_declaration:
-    type IDENT SEMICOLON /* Déclaration sans initialisation */
-    | type IDENT ASSIGN array_initialization SEMICOLON
+    array_type IDENT SEMICOLON /* Déclaration sans initialisation */
+    | array_type IDENT ASSIGN array_initialization SEMICOLON
     ;
 
 array_initialization:
-    NEW type array_dimensions
+    NEW type_abstract array_dimensions
+    | NEW premitive_type array_dimensions
     | LBRACE array_elements RBRACE
     ;
 
@@ -276,7 +304,7 @@ array_elements:
     ;
 
 array_access:
-    IDENT array_indices
+    IDENT array_indices 
     ;
 
 array_indices:
@@ -284,67 +312,16 @@ array_indices:
     | array_indices LBRACKET expression RBRACKET
     ;
 
-
 %%
 
-void yyerror(const char* msg) {
-    fprintf(stderr, "Erreur de syntaxe: %s\n", msg);
+int main ()
+{
+yyparse();
+return 0;
 }
-
-int main(int argc, char** argv) {
-    if (argc > 1) {
-        yyin = fopen(argv[1], "r");
-        if (!yyin) {
-            perror("Impossible d'ouvrir le fichier");
-            return 1;
-        }
-    }
-    
-    yyparse();
-    
-    printf("Analyse syntaxique terminée avec succès.\n");
-    return 0;
+int yywrap()
+{return 1;}
+int yyerror(char *msg)
+{ printf("syntaxic error");
+return 1;
 }
-OID | STRING | IDENT | type LBRACKET RBRACKET
-    ;
-
-array_declaration:
-    type IDENT SEMICOLON /* Déclaration sans initialisation */
-    | type IDENT ASSIGN array_initialization SEMICOLON
-    ;
-
-array_initialization:
-    NEW type array_dimensions
-    | LBRACE array_elements RBRACE
-    ;
-
-array_dimensions:
-    LBRACKET expression RBRACKET
-    | array_dimensions LBRACKET expression RBRACKET
-    ;
-
-array_elements:
-    expression
-    | array_elements COMMA expression
-    ;
-
-array_access:
-    IDENT array_indices
-    ;
-
-array_indices:
-    LBRACKET expression RBRACKET
-    | array_indices LBRACKET expression RBRACKET
-    ;
-
-
-%%
-
-void yyerror(const char* msg) {
-    fprintf(stderr, "Erreur de syntaxe: %s\n", msg);
-}
-
-int main(int argc, char** argv) {
-    if (argc > 1) {
-        yyin = fopen(argv[1], "r");
-        if (!y

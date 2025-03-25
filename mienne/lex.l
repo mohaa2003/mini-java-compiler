@@ -1,6 +1,8 @@
 %{
 #include "parse.tab.h"
-extern int nb_ligne;
+#include "ts.h"
+extern nb_ligne;
+extern YYSTYPE yylval;
 %}
 
 DIGIT       [0-9]
@@ -8,58 +10,29 @@ LETTER      [a-zA-Z_]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 NUMBER      {DIGIT}+
 STRING_LITERAL   (\"([^\\\"]|\\.)*\")|(\'([^\\\']|\\.)*\') 
-/* ajouter les commentaires single line et multi */
+COMMENT     " // ".*
+MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 %%
 
-"abstract"     { return ABSTRACT; }
-"assert"       { return ASSERT; }
 "boolean"      { return BOOLEAN; }
-"break"        { return BREAK; }
-"byte"         { return BYTE; }
-"case"         { return CASE; }
-"catch"        { return CATCH; }
 "char"         { return CHAR; }
 "class"        { return CLASS; }
-"const"        { return CONST; }
-"continue"     { return CONTINUE; }
-"default"      { return DEFAULT; }
-"do"           { return DO; }
-"double"       { return DOUBLE; }
-"else"         { return ELSE; }
-"enum"         { return ENUM; }
-"extends"      { return EXTENDS; }
 "final"        { return FINAL; }
-"finally"      { return FINALLY; }
+"double"       { return DOUBLE; }
 "float"        { return FLOAT; }
-"for"          { return FOR; }
-"if"           { return IF; }
-"implements"   { return IMPLEMENTS; }
-"instanceof"   { return INSTANCEOF; }
 "int"          { return INT; }
-"interface"    { return INTERFACE; }
 "long"         { return LONG; }
-"native"       { return NATIVE; }
-"new"          { return NEW; }
-"package"      { return PACKAGE; }
 "private"      { return PRIVATE; }
 "protected"    { return PROTECTED; }
 "public"       { return PUBLIC; }
-"return"       { return RETURN; }
 "short"        { return SHORT; }
 "static"       { return STATIC; }
-"strictfp"     { return STRICTFP; }
 "String"       { return STRING; }
-"super"        { return SUPER; }
-"switch"       { return SWITCH; }
-"synchronized" { return SYNCHRONIZED; }
+"new"          { return NEW; }
 "this"         { return THIS; }
-"throw"        { return THROW; }
-"throws"       { return THROWS; }
-"transient"    { return TRANSIENT; }
-"try"          { return TRY; }
-"void"         { return VOID; }
-"volatile"     { return VOLATILE; }
-"while"        { return WHILE; }
+"self"         { return SELF; }
+"return"       { return RETURN; }
+"void"       { return VOID; }
 
 "="   { return ASSIGN; }
 "=="  { return EQ; }
@@ -85,12 +58,6 @@ STRING_LITERAL   (\"([^\\\"]|\\.)*\")|(\'([^\\\']|\\.)*\')
 ";"   { return SEMICOLON; }
 ","   { return COMMA; }
 "."   { return DOT; }
-":"   { return COLON; }
-"?"   { return QUESTION; }
-"->"  { return ARROW; }
-"::"  { return DOUBLE_COLON; }
-"++"  { return INCREMENT; }
-"--"  { return DECREMENT; }
 "System"               { return SYSTEM; }
 "out"                  { return OUT; }
 "println"              { return PRINTLN; }
@@ -98,39 +65,9 @@ STRING_LITERAL   (\"([^\\\"]|\\.)*\")|(\'([^\\\']|\\.)*\')
 [ \t]           { /* Ignorer les espaces */ }
 {IDENTIFIER}           { return IDENT; }
 {NUMBER}               { return NUM; }
-/* {COMMENT}              {  }
-{MULTILINE_COMMENT}    {  } */
+{COMMENT}              { /* Ignorer les commentaires */ }
+{MULTILINE_COMMENT}    { /* Ignorer les commentaires multilignes */ }
 {STRING_LITERAL}       { return STRING_LITERAL; }
 
 . { printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext); }
 
-%%
-eturn NOT; }
-"+"   { return PLUS; }
-"-"   { return MINUS; }
-"*"   { return MULTIPLY; }
-"/"   { return DIVIDE; }
-"%"   { return MOD; }
-"("   { return LPAREN; }
-")"   { return RPAREN; }
-"{"   { return LBRACE; }
-"}"   { return RBRACE; }
-"["   { return LBRACKET; }
-"]"   { return RBRACKET; }
-";"   { return SEMICOLON; }
-","   { return COMMA; }
-"."   { return DOT; }
-":"   { return COLON; }
-"?"   { return QUESTION; }
-"->"  { return ARROW; }
-"::"  { return DOUBLE_COLON; }
-"++"  { return INCREMENT; }
-"--"  { return DECREMENT; }
-"System"               { return SYSTEM; }
-"out"                  { return OUT; }
-"println"              { return PRINTLN; }
-{IDENTIFIER}           { return IDENT; }
-{NUMBER}               { return NUM; }
-{COMMENT}              { /* Ignorer les commentaires */ }
-{MULTILINE_COMMENT}    { /* Ignorer les commentaires */ }
-{STRING_LITERAL}       { return STRING_LITER
