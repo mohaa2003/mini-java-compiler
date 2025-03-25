@@ -14,7 +14,7 @@ char* str;
 %token BOOLEAN CHAR CLASS
 %token DOUBLE FLOAT FINAL
 %token INT STRING LONG PRIVATE PROTECTED VOID
-%token PUBLIC SHORT STATIC NEW THIS SELF RETURN
+%token PUBLIC SHORT STATIC NEW THIS SELF /* RETURN */
 %token ASSIGN EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET SEMICOLON COMMA DOT
@@ -87,7 +87,7 @@ constructor_body:
     ;
 
 constructor_assignment:
-    THIS DOT IDENT ASSIGN expression
+    THIS DOT IDENT ASSIGN expression    //this est obligatoire dans l'initialisation d'un objet !
     ;
 
 /* method_declaration:
@@ -164,12 +164,11 @@ statement:
     /* | if_statement
     | while_statement
     | for_statement */
-    | return_statement SEMICOLON
+    //| return_statement SEMICOLON
     | print_statement SEMICOLON
     //method declaration ??
     | method_call SEMICOLON
     | instanciation
-    | creation_object
     /* | constructor_assignment SEMICOLON */
     
     ;
@@ -226,10 +225,10 @@ foreach_statement:
     | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
     ; */
 
-return_statement:
+/* return_statement:
     RETURN expression
     |RETURN creation_object
-    ;
+    ; */
 
 /* statement_list:
     // Vide
