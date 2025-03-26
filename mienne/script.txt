@@ -1,8 +1,8 @@
 class A {}
 public class B {}
 protected class C {
-    {{}}
-    {}
+    {{this.x(a,b);}{{}}{}}
+    {int [] N = {(2*3-4),"chlada"};}
     int[] M = new int[5][2];
     int [] N = {(2*3-4),"chlada"};
     int x,y,z=2;

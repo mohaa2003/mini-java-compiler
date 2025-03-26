@@ -76,8 +76,19 @@ core_body:
     /*method_declaration |*/
     | constructor_declaration
     | LBRACE RBRACE  // Accepte {} seul
-    | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu
+    | LBRACE block_body_sequence RBRACE  // Accepte { ... } avec contenu permise a l'interieur du block
     ;
+
+block_body_sequence:
+    block_body_sequence block_body
+    | block_body
+;
+
+block_body:
+    statement
+    | LBRACE RBRACE //block imbrique
+    | LBRACE block_body_sequence RBRACE //block imbrique
+;
 
 instanciation:
     type_abstract IDENT ASSIGN creation_object SEMICOLON
