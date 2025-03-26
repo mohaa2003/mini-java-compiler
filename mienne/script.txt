@@ -1,6 +1,6 @@
 class A {}
-public static class B {}
-class C {
+public class B {}
+protected class C {
     {{}}
     {}
     int[] M = new int[5][2];
@@ -13,7 +13,7 @@ class C {
     {
         System.out.println("sbah lkhir");
     }
-    self.abbas(a,b,c);
+    self.abbas(a,b,new claaas(new claas(),a));
     obj x = new Obj();
-    x = M[5][2][10];
+    x = M[5][2][10] - 2;
    }

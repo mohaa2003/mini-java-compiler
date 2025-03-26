@@ -30,7 +30,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "String"       { return STRING; }
 "new"          { return NEW; }
 "this"         { return THIS; }
-"self"         { return SELF; } /* "return"       { return RETURN; } */
+"self"         { return SELF; }/* "return"       { return RETURN; } */
 "void"       { return VOID; }
 
 "="   { return ASSIGN; }

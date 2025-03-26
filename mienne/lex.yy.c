@@ -789,7 +789,7 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 33 "lex.l"
-{ return SELF; } /* "return"       { return RETURN; } */
+{ return SELF; }/* "return"       { return RETURN; } */
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -969,15 +969,16 @@ YY_RULE_SETUP
 case 53:
 YY_RULE_SETUP
 #line 71 "lex.l"
-{ printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
-return ERR; }
+{
+     printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
+  }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 74 "lex.l"
+#line 75 "lex.l"
 ECHO;
 	YY_BREAK
-#line 981 "lex.yy.c"
+#line 982 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1863,4 +1864,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 74 "lex.l"
+#line 75 "lex.l"

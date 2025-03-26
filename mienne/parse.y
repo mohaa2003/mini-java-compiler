@@ -27,7 +27,6 @@ char* str;
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET SEMICOLON COMMA DOT
 %token IDENT NUM
 %token SYSTEM OUT PRINTLN
-%token ERR
 %start program
 
 /* %left ELSE */
@@ -50,22 +49,16 @@ program:
 
 class_declaration_list:
     class_declaration | class_declaration_list class_declaration
-    /* {printf("Syntaxe correcte !\n");
-    YYACCEPT;} */
     ;
 
 class_declaration:
-    modificator class_type CLASS IDENT LBRACE class_body RBRACE
+    modificator CLASS IDENT LBRACE class_body RBRACE
     ;
 
 modificator:
     PRIVATE |
     PUBLIC |
     PROTECTED |
-    ;
-
-class_type:
-    STATIC | 
     ;
 
 class_body:
@@ -107,23 +100,42 @@ constructor_assignment:
     THIS DOT IDENT ASSIGN expression    //this est obligatoire dans l'initialisation d'un objet !
     ;
 
+
 /* method_declaration:
-    types IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
-    | method_modifiers types IDENT LPAREN params RPAREN LBRACE statement_list RBRACE
+    modificator method_static method_final types IDENT LPAREN params RPAREN LBRACE block_body RBRACE
+    | modificator method_static method_final VOID IDENT LPAREN params RPAREN LBRACE block_body RBRACE
     ; */
 
+/* 
+block_body://la structeur d'un block
+    
+| block_core_body_sequence  // Changé: permet une séquence de core_body
+;
 
-/* method_modifiers:
-    method_modifier_list
+block_core_body_sequence:
+    block_core_body
+    | block_core_body_sequence block_core_body  // Permet plusieurs éléments consécutifs
     ;
 
-method_modifier_list:
-    method_modifier | method_modifier_list method_modifier
+block_core_body:
+    statement
+    //la declaration d'une methode dans une autre methode ou dans un block de controle est strictemenet interdit en java 
+    //la declaration de constructeur aussi
+    | LBRACE RBRACE  // Accepte {} seul
+    | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu
     ;
 
-method_modifier:
-    STATIC | FINAL | SYNCHRONIZED
-    ; */
+*/
+
+/* method_static:
+    STATIC
+;
+
+method_final:
+    FINAL
+; */
+
+
 
 
 params:
@@ -140,7 +152,7 @@ param_def:
     ;
 
 assignment:
-    IDENT ASSIGN expression | IDENT ASSIGN array_access | IDENT ASSIGN method_call | array_access ASSIGN expression
+    IDENT ASSIGN expression | array_access ASSIGN expression
     ;
 
 variables_declaration:
@@ -216,8 +228,13 @@ args:
     ;
 
 arg_list:
-    expression | arg_list COMMA expression
+    arg_type | arg_list COMMA arg_type
     ;
+
+arg_type:
+    expression
+    | creation_object
+;
 
 /* if_statement:
     IF LPAREN expression RPAREN LBRACE statement_list RBRACE optional_else
@@ -266,6 +283,8 @@ expression:
     | expression GTE simple_expression
     | expression AND simple_expression
     | expression OR simple_expression
+    | array_access
+    | method_call
     | MINUS expression %prec UMINUS
     | simple_expression
 ;
@@ -284,7 +303,7 @@ types:
 ;
 
 premitive_type:
-    INT | FLOAT | BOOLEAN | CHAR | DOUBLE | VOID | STRING | LONG | SHORT
+    INT | FLOAT | BOOLEAN | CHAR | DOUBLE | STRING | LONG | SHORT
 ;
 
 array_type:
