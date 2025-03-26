@@ -68,6 +68,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 {MULTILINE_COMMENT}    { /* Ignorer les commentaires multilignes */ }
 {STRING_LITERAL}       { return STRING_LITERAL; }
 
-. { printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
-return ERR; }
+. {
+     printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
+  }
 
