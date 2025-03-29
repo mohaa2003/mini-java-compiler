@@ -12,10 +12,13 @@ protected class C {
     constructeur(int a,short b , kaka c){
         this.a = 5*2/3;
     }
+    int fun(int a,int b){
+        int m[5] = 2;
+    }
     {
         System.out.println("sbah lkhir");
     }
     self.abbas(a,b,new claaas(new claas(),a));
-    obj x = new Obj();
+    obj x = new Obj(),y=new kk(10,12);
     x = M[5][2][10] - 2;
    }
