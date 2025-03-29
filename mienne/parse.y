@@ -73,7 +73,7 @@ core_body_sequence:
 
 core_body:
     statement
-    /*method_declaration |*/
+    | method_declaration 
     | constructor_declaration
     | LBRACE RBRACE  // Accepte {} seul
     | LBRACE block_body_sequence RBRACE  // Accepte { ... } avec contenu permise a l'interieur du block
@@ -90,8 +90,13 @@ block_body:
     | LBRACE block_body_sequence RBRACE //block imbrique
 ;
 
+instanciation_list:
+    instanciation_list COMMA instanciation
+    | instanciation
+;
+
 instanciation:
-    type_abstract IDENT ASSIGN creation_object SEMICOLON
+    IDENT ASSIGN creation_object
     ;
 
 creation_object:
@@ -112,31 +117,19 @@ constructor_assignment:
     ;
 
 
-/* method_declaration:
-    modificator method_static method_final types IDENT LPAREN params RPAREN LBRACE block_body RBRACE
-    | modificator method_static method_final VOID IDENT LPAREN params RPAREN LBRACE block_body RBRACE
-    ; */
-
-/* 
-block_body://la structeur d'un block
-    
-| block_core_body_sequence  // Changé: permet une séquence de core_body
-;
-
-block_core_body_sequence:
-    block_core_body
-    | block_core_body_sequence block_core_body  // Permet plusieurs éléments consécutifs
+method_declaration:
+    premitive_type IDENT LPAREN params RPAREN LBRACE block_body_sequence RBRACE
+    | array_type IDENT LPAREN params RPAREN LBRACE block_body_sequence RBRACE
+    | VOID IDENT LPAREN params RPAREN LBRACE block_body_sequence RBRACE
+    | type_abstract IDENT LPAREN params RPAREN LBRACE block_body_sequence RBRACE
+    | premitive_type IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
+    | array_type IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
+    | VOID IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
+    | type_abstract IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
     ;
 
-block_core_body:
-    statement
-    //la declaration d'une methode dans une autre methode ou dans un block de controle est strictemenet interdit en java 
-    //la declaration de constructeur aussi
-    | LBRACE RBRACE  // Accepte {} seul
-    | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu
-    ;
 
-*/
+
 
 /* method_static:
     STATIC
@@ -159,7 +152,9 @@ param_list:
     ;
 
 param_def:
-    types IDENT
+    premitive_type IDENT
+    | array_type IDENT
+    | type_abstract IDENT
     ;
 
 assignment:
@@ -167,7 +162,7 @@ assignment:
     ;
 
 variables_declaration:
-    type_abstract variables_init SEMICOLON
+    type_abstract instanciation_list SEMICOLON
     | premitive_type variables_init SEMICOLON
     ;
 
@@ -206,9 +201,7 @@ statement:
     | for_statement */
     //| return_statement SEMICOLON
     | print_statement SEMICOLON
-    //method declaration ??
     | method_call SEMICOLON
-    | instanciation
     /* | constructor_assignment SEMICOLON */
     
     ;
@@ -308,10 +301,6 @@ simple_expression:
     | NUM
     | STRING_LITERAL
     ;
-
-types:
-    premitive_type | type_abstract | array_type
-;
 
 premitive_type:
     INT | FLOAT | BOOLEAN | CHAR | DOUBLE | STRING | LONG | SHORT
