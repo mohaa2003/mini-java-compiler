@@ -30,8 +30,9 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "String"       { return STRING; }
 "new"          { return NEW; }
 "this"         { return THIS; }
-"self"         { return SELF; }/* "return"       { return RETURN; } */
-"void"       { return VOID; }
+"return"       { return RETURN; }
+"void"         { return VOID; }
+
 
 "="   { return ASSIGN; }
 "=="  { return EQ; }
@@ -54,6 +55,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "}"   { return RBRACE; }
 "["   { return LBRACKET; }
 "]"   { return RBRACKET; }
+"[]"   { return ARRAYBRACKETS; }
 ";"   { return SEMICOLON; }
 ","   { return COMMA; }
 "."   { return DOT; }

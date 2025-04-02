@@ -21,10 +21,10 @@ char* str;
 %token BOOLEAN CHAR CLASS
 %token DOUBLE FLOAT FINAL
 %token INT STRING LONG PRIVATE PROTECTED VOID
-%token PUBLIC SHORT RETURN NEW THIS SELF /* STATIC */
+%token PUBLIC SHORT RETURN NEW THIS STATIC
 %token ASSIGN EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
-%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET SEMICOLON COMMA DOT
+%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT
 %token IDENT NUM
 %token SYSTEM OUT PRINTLN
 %start program
@@ -76,7 +76,7 @@ core_body:
     | method_declaration 
     | constructor_declaration
     | LBRACE RBRACE  // Accepte {} seul
-    | LBRACE block_body_sequence RBRACE  // Accepte { ... } avec contenu permise a l'interieur du block
+    | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu permise a l'interieur du block
     ;
 
 block_body_sequence:
@@ -86,6 +86,7 @@ block_body_sequence:
 
 block_body:
     statement
+    | block_statement
     | LBRACE RBRACE //block imbrique
     | LBRACE block_body_sequence RBRACE //block imbrique
 ;
@@ -109,11 +110,7 @@ constructor_declaration:
 
 constructor_body:
     /* Vide */
-    | constructor_body constructor_assignment SEMICOLON
-    ;
-
-constructor_assignment:
-    THIS DOT IDENT ASSIGN expression    //this est obligatoire dans l'initialisation d'un objet !
+    | block_body_sequence
     ;
 
 
@@ -158,8 +155,14 @@ param_def:
     ;
 
 assignment:
-    IDENT ASSIGN expression | array_access ASSIGN expression
+    IDENT ASSIGN expression
     ;
+
+assignment_statement:
+    array_access ASSIGN expression
+    | qualified_access ASSIGN expression
+    | simple_access ASSIGN expression
+;
 
 variables_declaration:
     type_abstract instanciation_list SEMICOLON
@@ -191,19 +194,20 @@ variable_init:
     IDENT | assignment
     ;
 
-statement:
-    assignment SEMICOLON
-    | array_declaration
-    | variables_declaration
-    | constantes_declaration
+block_statement:
+    print_statement SEMICOLON
+    | method_call SEMICOLON    
+    | return_statement SEMICOLON
     /* | if_statement
     | while_statement
     | for_statement */
-    //| return_statement SEMICOLON
-    | print_statement SEMICOLON
-    | method_call SEMICOLON
-    /* | constructor_assignment SEMICOLON */
-    
+;
+
+statement:
+    assignment_statement SEMICOLON
+    | array_declaration
+    | variables_declaration
+    | constantes_declaration
     ;
 
 print_statement:
@@ -211,19 +215,29 @@ print_statement:
     ;
 
 
+method_prefix:
+    THIS DOT
+    ;
+
+
 sufix_methode_list:
-    IDENT DOT IDENT  // obj.method
-    | sufix_methode_list DOT IDENT  // obj.method.subMethod
+    IDENT DOT  // obj.method
+    | sufix_methode_list DOT   // obj.method.subMethod
 ;
 
-method_prefix:
-    THIS | SELF
-;
+qualified_method_call:
+    method_prefix IDENT LPAREN args RPAREN          // this.meth()
+    | sufix_methode_list IDENT LPAREN args RPAREN  // obj.meth()
+    ;
+
+    simple_method_call:
+    IDENT LPAREN args RPAREN                   // meth()
+    ;
 
 method_call:
-    sufix_methode_list LPAREN args RPAREN
-    | method_prefix DOT IDENT LPAREN args RPAREN  // la grammaire exige q'une methode sera prefixe, ex: this.method(), self.method()
-;                                                 // pour eviter le conflit avec la declaration des constructeurs
+    qualified_method_call    // obj.meth() ou this.meth()
+    | simple_method_call     // meth()
+    ;                                                 // pour eviter le conflit avec la declaration des constructeurs
 
 
 args:
@@ -263,15 +277,12 @@ foreach_statement:
     | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
     ; */
 
-/* return_statement:
-    RETURN expression
-    |RETURN creation_object
-    ; */
-
-/* statement_list:
-    // Vide
-    | statement_list statement
-    ; */
+return_statement:   //si a l'interieur d'une fonction il doit etre la valeur de retour de cette fonction
+                    //si n'est pas dans une fonction alors il act comme un exit()
+    RETURN //sortir sans aucun retour (danger a cause de type de retour)
+    | RETURN expression
+    | RETURN creation_object
+    ;
 
 expression:
     expression PLUS simple_expression
@@ -297,7 +308,8 @@ expression:
 simple_expression:
     NOT simple_expression
     | LPAREN expression RPAREN
-    | IDENT
+    | qualified_access        // obj.meth
+    | simple_access
     | NUM
     | STRING_LITERAL
     ;
@@ -307,8 +319,8 @@ premitive_type:
 ;
 
 array_type:
-    premitive_type LBRACKET RBRACKET
-    | IDENT /*type abstract , je l'ai pas mentionne pour eviter le conflit !*/ LBRACKET RBRACKET
+    premitive_type ARRAYBRACKETS
+    | IDENT /*type abstract , je l'ai pas mentionne pour eviter le conflit !*/ ARRAYBRACKETS
 ;
 
 type_abstract:
@@ -339,7 +351,17 @@ array_elements:
     ;
 
 array_access:
-    IDENT array_indices
+    qualified_access array_indices
+    | simple_access array_indices
+    ;
+
+qualified_access:
+    sufix_methode_list IDENT  // obj.arr
+    | method_prefix IDENT           // this.arr
+    ;
+
+simple_access:
+    IDENT                     // arr
     ;
 
 array_indices:

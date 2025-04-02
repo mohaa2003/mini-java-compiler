@@ -3,7 +3,7 @@ public class B {
     
 }
 protected class C {
-    {{this.x(a,b);}{{}}{}}
+    {{x(int a,k b){}}{{}}{}}
     {int [] N = {(2*3-4),"chlada"};}
     int[] M = new int[5][2];
     int [] N = {(2*3-4),"chlada"};
@@ -11,14 +11,17 @@ protected class C {
     final int a=5,b=16;
     constructeur(int a,short b , kaka c){
         this.a = 5*2/3;
+        this.b = b;
     }
     int fun(int a,int b){
-        int m[5] = 2;
+        return new Mark();
     }
     {
-        System.out.println("sbah lkhir");
+        
     }
-    self.abbas(a,b,new claaas(new claas(),a));
+    k[] fn(){kkk(a,b,c);
+    kk.abbas(a,b,new claaas(new claas(),a));
+    System.out.println("sbah lkhir");}
     obj x = new Obj(),y=new kk(10,12);
     x = M[5][2][10] - 2;
    }

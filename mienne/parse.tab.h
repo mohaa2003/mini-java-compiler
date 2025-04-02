@@ -53,10 +53,10 @@
      VOID = 269,
      PUBLIC = 270,
      SHORT = 271,
-     STATIC = 272,
+     RETURN = 272,
      NEW = 273,
      THIS = 274,
-     SELF = 275,
+     STATIC = 275,
      ASSIGN = 276,
      EQ = 277,
      NEQ = 278,
@@ -79,15 +79,16 @@
      RBRACE = 295,
      LBRACKET = 296,
      RBRACKET = 297,
-     SEMICOLON = 298,
-     COMMA = 299,
-     DOT = 300,
-     IDENT = 301,
-     NUM = 302,
-     SYSTEM = 303,
-     OUT = 304,
-     PRINTLN = 305,
-     UMINUS = 306
+     ARRAYBRACKETS = 298,
+     SEMICOLON = 299,
+     COMMA = 300,
+     DOT = 301,
+     IDENT = 302,
+     NUM = 303,
+     SYSTEM = 304,
+     OUT = 305,
+     PRINTLN = 306,
+     UMINUS = 307
    };
 #endif
 
@@ -106,7 +107,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 110 "parse.tab.h"
+#line 111 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
