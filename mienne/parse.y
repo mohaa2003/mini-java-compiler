@@ -61,6 +61,16 @@ modificator:
     PROTECTED |
     ;
 
+object_modificators:
+    PRIVATE |
+    PUBLIC |
+    PROTECTED |
+    PRIVATE STATIC |
+    PUBLIC STATIC |
+    PROTECTED STATIC |
+    STATIC
+;
+
 class_body:
     /* Vide */
     | core_body_sequence  // Changé: permet une séquence de core_body
@@ -74,7 +84,9 @@ core_body_sequence:
 core_body:
     statement
     | method_declaration 
+    | object_modificators method_declaration 
     | constructor_declaration
+    | object_modificators constructor_declaration
     | LBRACE RBRACE  // Accepte {} seul
     | LBRACE core_body_sequence RBRACE  // Accepte { ... } avec contenu permise a l'interieur du block
     ;
@@ -124,20 +136,6 @@ method_declaration:
     | VOID IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
     | type_abstract IDENT LPAREN params RPAREN LBRACE RBRACE //pas de corps
     ;
-
-
-
-
-/* method_static:
-    STATIC
-;
-
-method_final:
-    FINAL
-; */
-
-
-
 
 params:
     /* Vide */
@@ -206,8 +204,11 @@ block_statement:
 statement:
     assignment_statement SEMICOLON
     | array_declaration
+    | object_modificators array_declaration
     | variables_declaration
+    | object_modificators variables_declaration
     | constantes_declaration
+    | object_modificators constantes_declaration
     ;
 
 print_statement:

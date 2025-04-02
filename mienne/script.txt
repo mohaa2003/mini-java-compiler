@@ -3,8 +3,9 @@ public class B {
     
 }
 protected class C {
-    {{x(int a,k b){}}{{}}{}}
-    {int [] N = {(2*3-4),"chlada"};}
+    {{
+        protected x(int a,k b){}}{{}}{}}
+    {private int [] N = {(2*3-4),"chlada"};}
     int[] M = new int[5][2];
     int [] N = {(2*3-4),"chlada"};
     int x,y,z=2;
