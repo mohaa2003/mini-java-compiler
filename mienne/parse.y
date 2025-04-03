@@ -223,7 +223,7 @@ method_prefix:
 
 sufix_methode_list:
     IDENT DOT  // obj.method
-    | sufix_methode_list DOT   // obj.method.subMethod
+    | sufix_methode_list IDENT DOT   // obj.method.subMethod
 ;
 
 qualified_method_call:

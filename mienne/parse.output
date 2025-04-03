@@ -113,7 +113,7 @@ Grammar
    80 method_prefix: THIS DOT
 
    81 sufix_methode_list: IDENT DOT
-   82                   | sufix_methode_list DOT
+   82                   | sufix_methode_list IDENT DOT
 
    83 qualified_method_call: method_prefix IDENT LPAREN args RPAREN
    84                      | sufix_methode_list IDENT LPAREN args RPAREN
@@ -248,8 +248,8 @@ ARRAYBRACKETS (298) 128 129
 SEMICOLON (299) 59 60 61 62 69 70 71 72 131 132
 COMMA (300) 33 51 63 65 91 139
 DOT (301) 79 80 81 82
-IDENT (302) 4 35 36 37 40 41 42 43 44 45 46 47 52 53 54 55 67 81 83
-    84 85 129 130 131 132 142 143 144
+IDENT (302) 4 35 36 37 40 41 42 43 44 45 46 47 52 53 54 55 67 81 82
+    83 84 85 129 130 131 132 142 143 144
 NUM (303) 118
 SYSTEM (304) 79
 OUT (305) 79
@@ -842,11 +842,10 @@ state 40
 
 state 41
 
-   82 sufix_methode_list: sufix_methode_list . DOT
+   82 sufix_methode_list: sufix_methode_list . IDENT DOT
   142 qualified_access: sufix_methode_list . IDENT
 
-    DOT    shift, and go to state 72
-    IDENT  shift, and go to state 73
+    IDENT  shift, and go to state 72
 
 
 state 42
@@ -856,12 +855,12 @@ state 42
    60 variables_declaration: premitive_type . variables_init SEMICOLON
   128 array_type: premitive_type . ARRAYBRACKETS
 
-    ARRAYBRACKETS  shift, and go to state 74
-    IDENT          shift, and go to state 75
+    ARRAYBRACKETS  shift, and go to state 73
+    IDENT          shift, and go to state 74
 
-    assignment      go to state 76
-    variables_init  go to state 77
-    variable_init   go to state 78
+    assignment      go to state 75
+    variables_init  go to state 76
+    variable_init   go to state 77
 
 
 state 43
@@ -871,7 +870,7 @@ state 43
   131 array_declaration: array_type . IDENT SEMICOLON
   132                  | array_type . IDENT ASSIGN array_initialization SEMICOLON
 
-    IDENT  shift, and go to state 79
+    IDENT  shift, and go to state 78
 
 
 state 44
@@ -880,10 +879,10 @@ state 44
    47                   | type_abstract . IDENT LPAREN params RPAREN LBRACE RBRACE
    59 variables_declaration: type_abstract . instanciation_list SEMICOLON
 
-    IDENT  shift, and go to state 80
+    IDENT  shift, and go to state 79
 
-    instanciation_list  go to state 81
-    instanciation       go to state 82
+    instanciation_list  go to state 80
+    instanciation       go to state 81
 
 
 state 45
@@ -897,7 +896,7 @@ state 46
 
    56 assignment_statement: array_access . ASSIGN expression
 
-    ASSIGN  shift, and go to state 83
+    ASSIGN  shift, and go to state 82
 
 
 state 47
@@ -905,10 +904,10 @@ state 47
    57 assignment_statement: qualified_access . ASSIGN expression
   140 array_access: qualified_access . array_indices
 
-    ASSIGN    shift, and go to state 84
-    LBRACKET  shift, and go to state 85
+    ASSIGN    shift, and go to state 83
+    LBRACKET  shift, and go to state 84
 
-    array_indices  go to state 86
+    array_indices  go to state 85
 
 
 state 48
@@ -916,10 +915,10 @@ state 48
    58 assignment_statement: simple_access . ASSIGN expression
   141 array_access: simple_access . array_indices
 
-    ASSIGN    shift, and go to state 87
-    LBRACKET  shift, and go to state 85
+    ASSIGN    shift, and go to state 86
+    LBRACKET  shift, and go to state 84
 
-    array_indices  go to state 88
+    array_indices  go to state 87
 
 
 state 49
@@ -933,20 +932,20 @@ state 50
 
    62 constantes_declaration: FINAL premitive_type . constantes_init SEMICOLON
 
-    IDENT  shift, and go to state 89
+    IDENT  shift, and go to state 88
 
-    assignment       go to state 90
-    constantes_init  go to state 91
+    assignment       go to state 89
+    constantes_init  go to state 90
 
 
 state 51
 
    61 constantes_declaration: FINAL type_abstract . constantes_init SEMICOLON
 
-    IDENT  shift, and go to state 89
+    IDENT  shift, and go to state 88
 
-    assignment       go to state 90
-    constantes_init  go to state 92
+    assignment       go to state 89
+    constantes_init  go to state 91
 
 
 state 52
@@ -968,7 +967,7 @@ state 54
    42 method_declaration: VOID IDENT . LPAREN params RPAREN LBRACE block_body_sequence RBRACE
    46                   | VOID IDENT . LPAREN params RPAREN LBRACE RBRACE
 
-    LPAREN  shift, and go to state 93
+    LPAREN  shift, and go to state 92
 
 
 state 55
@@ -1013,7 +1012,7 @@ state 58
     THIS       shift, and go to state 26
     STATIC     shift, and go to state 27
     LBRACE     shift, and go to state 28
-    RBRACE     shift, and go to state 94
+    RBRACE     shift, and go to state 93
     IDENT      shift, and go to state 29
 
     object_modificators      go to state 30
@@ -1047,16 +1046,16 @@ state 59
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     $default  reduce using rule 48 (params)
 
-    params          go to state 96
-    param_list      go to state 97
-    param_def       go to state 98
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    params          go to state 95
+    param_list      go to state 96
+    param_def       go to state 97
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
 state 60
@@ -1150,26 +1149,22 @@ state 71
 
 state 72
 
-   82 sufix_methode_list: sufix_methode_list DOT .
-
-    $default  reduce using rule 82 (sufix_methode_list)
-
-
-state 73
-
+   82 sufix_methode_list: sufix_methode_list IDENT . DOT
   142 qualified_access: sufix_methode_list IDENT .
+
+    DOT  shift, and go to state 101
 
     $default  reduce using rule 142 (qualified_access)
 
 
-state 74
+state 73
 
   128 array_type: premitive_type ARRAYBRACKETS .
 
     $default  reduce using rule 128 (array_type)
 
 
-state 75
+state 74
 
    40 method_declaration: premitive_type IDENT . LPAREN params RPAREN LBRACE block_body_sequence RBRACE
    44                   | premitive_type IDENT . LPAREN params RPAREN LBRACE RBRACE
@@ -1182,14 +1177,14 @@ state 75
     $default  reduce using rule 67 (variable_init)
 
 
-state 76
+state 75
 
    68 variable_init: assignment .
 
     $default  reduce using rule 68 (variable_init)
 
 
-state 77
+state 76
 
    60 variables_declaration: premitive_type variables_init . SEMICOLON
    63 variables_init: variables_init . COMMA variable_init
@@ -1198,14 +1193,14 @@ state 77
     COMMA      shift, and go to state 105
 
 
-state 78
+state 77
 
    64 variables_init: variable_init .
 
     $default  reduce using rule 64 (variables_init)
 
 
-state 79
+state 78
 
    41 method_declaration: array_type IDENT . LPAREN params RPAREN LBRACE block_body_sequence RBRACE
    45                   | array_type IDENT . LPAREN params RPAREN LBRACE RBRACE
@@ -1217,7 +1212,7 @@ state 79
     SEMICOLON  shift, and go to state 108
 
 
-state 80
+state 79
 
    35 instanciation: IDENT . ASSIGN creation_object
    43 method_declaration: type_abstract IDENT . LPAREN params RPAREN LBRACE block_body_sequence RBRACE
@@ -1227,7 +1222,7 @@ state 80
     LPAREN  shift, and go to state 110
 
 
-state 81
+state 80
 
    33 instanciation_list: instanciation_list . COMMA instanciation
    59 variables_declaration: type_abstract instanciation_list . SEMICOLON
@@ -1236,14 +1231,14 @@ state 81
     COMMA      shift, and go to state 112
 
 
-state 82
+state 81
 
    34 instanciation_list: instanciation .
 
     $default  reduce using rule 34 (instanciation_list)
 
 
-state 83
+state 82
 
    56 assignment_statement: array_access ASSIGN . expression
 
@@ -1267,7 +1262,7 @@ state 83
     simple_access          go to state 128
 
 
-state 84
+state 83
 
    57 assignment_statement: qualified_access ASSIGN . expression
 
@@ -1291,7 +1286,7 @@ state 84
     simple_access          go to state 128
 
 
-state 85
+state 84
 
   145 array_indices: LBRACKET . expression RBRACKET
 
@@ -1315,7 +1310,7 @@ state 85
     simple_access          go to state 128
 
 
-state 86
+state 85
 
   140 array_access: qualified_access array_indices .
   146 array_indices: array_indices . LBRACKET expression RBRACKET
@@ -1325,7 +1320,7 @@ state 86
     $default  reduce using rule 140 (array_access)
 
 
-state 87
+state 86
 
    58 assignment_statement: simple_access ASSIGN . expression
 
@@ -1349,7 +1344,7 @@ state 87
     simple_access          go to state 128
 
 
-state 88
+state 87
 
   141 array_access: simple_access array_indices .
   146 array_indices: array_indices . LBRACKET expression RBRACKET
@@ -1359,21 +1354,21 @@ state 88
     $default  reduce using rule 141 (array_access)
 
 
-state 89
+state 88
 
    55 assignment: IDENT . ASSIGN expression
 
     ASSIGN  shift, and go to state 102
 
 
-state 90
+state 89
 
    66 constantes_init: assignment .
 
     $default  reduce using rule 66 (constantes_init)
 
 
-state 91
+state 90
 
    62 constantes_declaration: FINAL premitive_type constantes_init . SEMICOLON
    65 constantes_init: constantes_init . COMMA assignment
@@ -1382,7 +1377,7 @@ state 91
     COMMA      shift, and go to state 134
 
 
-state 92
+state 91
 
    61 constantes_declaration: FINAL type_abstract constantes_init . SEMICOLON
    65 constantes_init: constantes_init . COMMA assignment
@@ -1391,7 +1386,7 @@ state 92
     COMMA      shift, and go to state 134
 
 
-state 93
+state 92
 
    42 method_declaration: VOID IDENT LPAREN . params RPAREN LBRACE block_body_sequence RBRACE
    46                   | VOID IDENT LPAREN . params RPAREN LBRACE RBRACE
@@ -1404,26 +1399,26 @@ state 93
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     $default  reduce using rule 48 (params)
 
     params          go to state 136
-    param_list      go to state 97
-    param_def       go to state 98
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    param_list      go to state 96
+    param_def       go to state 97
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
-state 94
+state 93
 
    26 core_body: LBRACE core_body_sequence RBRACE .
 
     $default  reduce using rule 26 (core_body)
 
 
-state 95
+state 94
 
   129 array_type: IDENT . ARRAYBRACKETS
   130 type_abstract: IDENT .
@@ -1433,14 +1428,14 @@ state 95
     $default  reduce using rule 130 (type_abstract)
 
 
-state 96
+state 95
 
    37 constructor_declaration: IDENT LPAREN params . RPAREN LBRACE constructor_body RBRACE
 
     RPAREN  shift, and go to state 137
 
 
-state 97
+state 96
 
    49 params: param_list .
    51 param_list: param_list . COMMA param_def
@@ -1450,34 +1445,41 @@ state 97
     $default  reduce using rule 49 (params)
 
 
-state 98
+state 97
 
    50 param_list: param_def .
 
     $default  reduce using rule 50 (param_list)
 
 
-state 99
+state 98
 
    52 param_def: premitive_type . IDENT
   128 array_type: premitive_type . ARRAYBRACKETS
 
-    ARRAYBRACKETS  shift, and go to state 74
+    ARRAYBRACKETS  shift, and go to state 73
     IDENT          shift, and go to state 139
 
 
-state 100
+state 99
 
    53 param_def: array_type . IDENT
 
     IDENT  shift, and go to state 140
 
 
-state 101
+state 100
 
    54 param_def: type_abstract . IDENT
 
     IDENT  shift, and go to state 141
+
+
+state 101
+
+   82 sufix_methode_list: sufix_methode_list IDENT DOT .
+
+    $default  reduce using rule 82 (sufix_methode_list)
 
 
 state 102
@@ -1517,16 +1519,16 @@ state 103
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     $default  reduce using rule 48 (params)
 
     params          go to state 143
-    param_list      go to state 97
-    param_def       go to state 98
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    param_list      go to state 96
+    param_def       go to state 97
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
 state 104
@@ -1542,7 +1544,7 @@ state 105
 
     IDENT  shift, and go to state 144
 
-    assignment     go to state 76
+    assignment     go to state 75
     variable_init  go to state 145
 
 
@@ -1569,16 +1571,16 @@ state 107
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     $default  reduce using rule 48 (params)
 
     params          go to state 149
-    param_list      go to state 97
-    param_def       go to state 98
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    param_list      go to state 96
+    param_def       go to state 97
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
 state 108
@@ -1610,16 +1612,16 @@ state 110
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     $default  reduce using rule 48 (params)
 
     params          go to state 152
-    param_list      go to state 97
-    param_def       go to state 98
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    param_list      go to state 96
+    param_def       go to state 97
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
 state 111
@@ -1740,11 +1742,10 @@ state 119
 
 state 120
 
-   82 sufix_methode_list: sufix_methode_list . DOT
+   82 sufix_methode_list: sufix_methode_list . IDENT DOT
    84 qualified_method_call: sufix_methode_list . IDENT LPAREN args RPAREN
   142 qualified_access: sufix_methode_list . IDENT
 
-    DOT    shift, and go to state 72
     IDENT  shift, and go to state 163
 
 
@@ -1822,11 +1823,11 @@ state 127
   116 simple_expression: qualified_access .
   140 array_access: qualified_access . array_indices
 
-    LBRACKET  shift, and go to state 85
+    LBRACKET  shift, and go to state 84
 
     $default  reduce using rule 116 (simple_expression)
 
-    array_indices  go to state 86
+    array_indices  go to state 85
 
 
 state 128
@@ -1834,11 +1835,11 @@ state 128
   117 simple_expression: simple_access .
   141 array_access: simple_access . array_indices
 
-    LBRACKET  shift, and go to state 85
+    LBRACKET  shift, and go to state 84
 
     $default  reduce using rule 117 (simple_expression)
 
-    array_indices  go to state 88
+    array_indices  go to state 87
 
 
 state 129
@@ -1977,7 +1978,7 @@ state 134
 
    65 constantes_init: constantes_init COMMA . assignment
 
-    IDENT  shift, and go to state 89
+    IDENT  shift, and go to state 88
 
     assignment  go to state 179
 
@@ -2016,12 +2017,12 @@ state 138
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     param_def       go to state 182
-    premitive_type  go to state 99
-    array_type      go to state 100
-    type_abstract   go to state 101
+    premitive_type  go to state 98
+    array_type      go to state 99
+    type_abstract   go to state 100
 
 
 state 139
@@ -2326,10 +2327,12 @@ state 162
 
 state 163
 
+   82 sufix_methode_list: sufix_methode_list IDENT . DOT
    84 qualified_method_call: sufix_methode_list IDENT . LPAREN args RPAREN
   142 qualified_access: sufix_methode_list IDENT .
 
     LPAREN  shift, and go to state 199
+    DOT     shift, and go to state 101
 
     $default  reduce using rule 142 (qualified_access)
 
@@ -3177,7 +3180,7 @@ state 219
     STRING   shift, and go to state 19
     LONG     shift, and go to state 20
     SHORT    shift, and go to state 25
-    IDENT    shift, and go to state 95
+    IDENT    shift, and go to state 94
 
     variables_declaration   go to state 65
     constantes_declaration  go to state 66
@@ -3290,12 +3293,12 @@ state 228
    60 variables_declaration: premitive_type . variables_init SEMICOLON
   128 array_type: premitive_type . ARRAYBRACKETS
 
-    ARRAYBRACKETS  shift, and go to state 74
+    ARRAYBRACKETS  shift, and go to state 73
     IDENT          shift, and go to state 144
 
-    assignment      go to state 76
-    variables_init  go to state 77
-    variable_init   go to state 78
+    assignment      go to state 75
+    variables_init  go to state 76
+    variable_init   go to state 77
 
 
 state 229
@@ -3312,8 +3315,8 @@ state 230
 
     IDENT  shift, and go to state 153
 
-    instanciation_list  go to state 81
-    instanciation       go to state 82
+    instanciation_list  go to state 80
+    instanciation       go to state 81
 
 
 state 231

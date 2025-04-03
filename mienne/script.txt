@@ -10,8 +10,8 @@ protected class C {
     int [] N = {(2*3-4),"chlada"};
     int x,y,z=2;
     final int a=5,b=16;
-    constructeur(int a,short b , kaka c){
-        this.a = 5*2/3;
+    private constructeur(int a,short b , kaka c){
+        k.c.q.a = 5*2/3;
         this.b = b;
     }
     int fun(int a,int b){
