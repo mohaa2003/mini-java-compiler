@@ -24,7 +24,7 @@ char* str;
 %token PUBLIC SHORT RETURN NEW THIS STATIC
 %token ASSIGN EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
-%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT
+%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT COLON
 %token IDENT NUM ERR
 %token SYSTEM OUT PRINTLN
 %token TRY CATCH FINALLY
@@ -201,6 +201,7 @@ block_statement:
     | if_statement
     | while_statement
     | for_statement
+    | foreach_statement
 ;
 
 statement:
@@ -257,6 +258,8 @@ arg_type:
     | creation_object
 ;
 
+//------------------------------------ LES BOUCLES ET LES BLOCKS DE CONTROLES ---------------------------------
+
 if_statement:
     IF LPAREN expression RPAREN LBRACE RBRACE               /* if sans else */
     //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE block_body_sequence                /* if avec simple else */
@@ -286,6 +289,16 @@ for_update:
       assignment
     | /* Vide */
     ;
+
+/* --- foreach statement --- */
+foreach_statement:
+    FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE RBRACE
+    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE RBRACE
+    | FOR LPAREN array_type IDENT COLON IDENT RPAREN LBRACE RBRACE
+    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
+    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
+    | FOR LPAREN array_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
+;
 
 
 /* if_statement:

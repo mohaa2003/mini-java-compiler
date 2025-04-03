@@ -67,6 +67,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "]"   { return RBRACKET; }
 "[]"   { return ARRAYBRACKETS; }
 ";"   { return SEMICOLON; }
+":"   { return COLON; }
 ","   { return COMMA; }
 "."   { return DOT; }
 "System"               { return SYSTEM; }

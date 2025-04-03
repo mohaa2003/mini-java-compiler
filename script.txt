@@ -14,7 +14,11 @@ protected class C {
         k.c.q.a = 5*2/3;
         this.b = b;
         try{while(0){}}
-        catch(E e){}
+        catch(E e){
+            for(int i:m){
+                System.out.println(i);
+            }
+        }
         finally{
             for(i=2;i<12;i=i+1){
                 if(i==2){}

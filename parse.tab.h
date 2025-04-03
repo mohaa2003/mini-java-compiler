@@ -83,23 +83,24 @@
      SEMICOLON = 299,
      COMMA = 300,
      DOT = 301,
-     IDENT = 302,
-     NUM = 303,
-     ERR = 304,
-     SYSTEM = 305,
-     OUT = 306,
-     PRINTLN = 307,
-     TRY = 308,
-     CATCH = 309,
-     FINALLY = 310,
-     IF = 311,
-     WHILE = 312,
-     FOR = 313,
-     SWITCH = 314,
-     CASE = 315,
-     DEFAULT = 316,
-     ELSE = 317,
-     UMINUS = 318
+     COLON = 302,
+     IDENT = 303,
+     NUM = 304,
+     ERR = 305,
+     SYSTEM = 306,
+     OUT = 307,
+     PRINTLN = 308,
+     TRY = 309,
+     CATCH = 310,
+     FINALLY = 311,
+     IF = 312,
+     WHILE = 313,
+     FOR = 314,
+     SWITCH = 315,
+     CASE = 316,
+     DEFAULT = 317,
+     ELSE = 318,
+     UMINUS = 319
    };
 #endif
 
@@ -118,7 +119,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 122 "parse.tab.h"
+#line 123 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
