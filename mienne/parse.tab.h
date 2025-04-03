@@ -85,10 +85,11 @@
      DOT = 301,
      IDENT = 302,
      NUM = 303,
-     SYSTEM = 304,
-     OUT = 305,
-     PRINTLN = 306,
-     UMINUS = 307
+     ERR = 304,
+     SYSTEM = 305,
+     OUT = 306,
+     PRINTLN = 307,
+     UMINUS = 308
    };
 #endif
 
@@ -107,7 +108,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 111 "parse.tab.h"
+#line 112 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

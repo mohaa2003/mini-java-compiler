@@ -976,14 +976,15 @@ YY_RULE_SETUP
 #line 73 "lex.l"
 {
      printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
+     return ERR;
   }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 77 "lex.l"
+#line 78 "lex.l"
 ECHO;
 	YY_BREAK
-#line 987 "lex.yy.c"
+#line 988 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1869,4 +1870,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 77 "lex.l"
+#line 78 "lex.l"

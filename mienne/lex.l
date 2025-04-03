@@ -72,5 +72,6 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 
 . {
      printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
+     return ERR;
   }
 
