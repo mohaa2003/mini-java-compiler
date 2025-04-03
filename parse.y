@@ -28,6 +28,7 @@ char* str;
 %token IDENT NUM ERR
 %token SYSTEM OUT PRINTLN
 %token TRY CATCH FINALLY
+%token IF WHILE FOR SWITCH CASE DEFAULT ELSE
 %start program
 
 /* %left ELSE */
@@ -176,7 +177,6 @@ constantes_declaration:
 
 /* variable_declaration_for:
     premitive_type variable_init                  //mal compris !
-    | type_abstract variable_init                  //mal compris !
     ; */
 
 variables_init:
@@ -198,9 +198,9 @@ block_statement:
     | method_call SEMICOLON    
     | return_statement SEMICOLON
     | exception_statement
-    /* | if_statement
+    | if_statement
     | while_statement
-    | for_statement */
+    /*| for_statement */
 ;
 
 statement:
@@ -256,6 +256,20 @@ arg_type:
     expression
     | creation_object
 ;
+
+if_statement:
+    IF LPAREN expression RPAREN LBRACE RBRACE               /* if sans else */
+    //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE block_body_sequence                /* if avec simple else */
+    //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE if_statement               /* if avec "else if" (chainable) */
+    | IF LPAREN expression RPAREN LBRACE block_body_sequence RBRACE               /* if sans else */
+    //| IF LPAREN expression RPAREN LBRACE RBRACE block_body_sequence ELSE statement                /* if avec simple else */
+    //| IF LPAREN expression RPAREN LBRACE RBRACE block_body_sequence ELSE if_statement               /* if avec "else if" (chainable) */
+    ;
+
+    while_statement:
+      WHILE LPAREN expression RPAREN LBRACE block_body RBRACE
+      | WHILE LPAREN expression RPAREN LBRACE RBRACE
+    ;
 
 /* if_statement:
     IF LPAREN expression RPAREN LBRACE statement_list RBRACE optional_else

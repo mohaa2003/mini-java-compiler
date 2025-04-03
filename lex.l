@@ -35,6 +35,13 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "try"         { return TRY; }
 "catch"         { return CATCH; }
 "finally"         { return FINALLY; }
+"if"         { return IF; }
+"else"         { return ELSE; }
+"while"         { return WHILE; }
+"for"         { return FOR; }
+"switch"         { return SWITCH; }
+"case"         { return CASE; }
+"default"         { return DEFAULT; }
 
 
 "="   { return ASSIGN; }
