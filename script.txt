@@ -15,7 +15,11 @@ protected class C {
         this.b = b;
         try{while(0){}}
         catch(E e){}
-        finally{}
+        finally{
+            for(i=2;i<12;i=i+1){
+                if(i==2){}
+            }
+        }
     }
     int fun(int a,int b){
         return new Mark();

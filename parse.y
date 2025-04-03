@@ -165,14 +165,14 @@ assignment_statement:
 ;
 
 variables_declaration:
-    type_abstract instanciation_list SEMICOLON
-    | premitive_type variables_init SEMICOLON
+    type_abstract instanciation_list
+    | premitive_type variables_init
     ;
 
 
 constantes_declaration:
-    FINAL type_abstract constantes_init SEMICOLON
-    | FINAL premitive_type constantes_init SEMICOLON
+    FINAL type_abstract constantes_init
+    | FINAL premitive_type constantes_init
     ;
 
 /* variable_declaration_for:
@@ -200,17 +200,17 @@ block_statement:
     | exception_statement
     | if_statement
     | while_statement
-    /*| for_statement */
+    | for_statement
 ;
 
 statement:
     assignment_statement SEMICOLON
-    | array_declaration
-    | object_modificators array_declaration
-    | variables_declaration
-    | object_modificators variables_declaration
-    | constantes_declaration
-    | object_modificators constantes_declaration
+    | array_declaration SEMICOLON
+    | object_modificators array_declaration SEMICOLON
+    | variables_declaration SEMICOLON
+    | object_modificators variables_declaration SEMICOLON
+    | constantes_declaration SEMICOLON
+    | object_modificators constantes_declaration SEMICOLON
     ;
 
 print_statement:
@@ -266,10 +266,27 @@ if_statement:
     //| IF LPAREN expression RPAREN LBRACE RBRACE block_body_sequence ELSE if_statement               /* if avec "else if" (chainable) */
     ;
 
-    while_statement:
-      WHILE LPAREN expression RPAREN LBRACE block_body RBRACE
-      | WHILE LPAREN expression RPAREN LBRACE RBRACE
+while_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
+    WHILE LPAREN expression RPAREN LBRACE block_body_sequence RBRACE
+    | WHILE LPAREN expression RPAREN LBRACE RBRACE
+;
+
+for_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
+      FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE block_body_sequence RBRACE
+      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE RBRACE
+;
+
+for_init:
+      assignment
+    | variables_declaration
+    | /* Vide */
     ;
+
+for_update:  
+      assignment
+    | /* Vide */
+    ;
+
 
 /* if_statement:
     IF LPAREN expression RPAREN LBRACE statement_list RBRACE optional_else
@@ -347,8 +364,8 @@ type_abstract:
 
 
 array_declaration:
-    array_type IDENT SEMICOLON /* Déclaration sans initialisation */
-    | array_type IDENT ASSIGN array_initialization SEMICOLON
+    array_type IDENT /* Déclaration sans initialisation */
+    | array_type IDENT ASSIGN array_initialization
     ;
 
 array_initialization:
