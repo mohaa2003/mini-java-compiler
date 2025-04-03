@@ -10,7 +10,7 @@ LETTER      [a-zA-Z_]
 IDENTIFIER  {LETTER}({LETTER}|{DIGIT})*
 NUMBER      {DIGIT}+
 STRING_LITERAL   (\"([^\\\"]|\\.)*\")|(\'([^\\\']|\\.)*\') 
-COMMENT     " // ".*
+COMMENT     "//".*
 MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 %%
 
@@ -42,9 +42,17 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "switch"         { return SWITCH; }
 "case"         { return CASE; }
 "default"         { return DEFAULT; }
+"break"        { return BREAK; }
 
 
 "="   { return ASSIGN; }
+"+="   { return ASSIGNPLUS; }
+"-="   { return ASSIGNMINUS; }
+"*="   { return ASSIGNMULT; }
+"%="   { return ASSIGNMOD; }
+"/="   { return ASSIGNDIV; }
+"++"   { return INC; }
+"--"   { return DEC; }
 "=="  { return EQ; }
 "!="  { return NEQ; }
 "<"   { return LT; }

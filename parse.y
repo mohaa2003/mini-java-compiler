@@ -22,17 +22,17 @@ char* str;
 %token DOUBLE FLOAT FINAL
 %token INT STRING LONG PRIVATE PROTECTED VOID
 %token PUBLIC SHORT RETURN NEW THIS STATIC
-%token ASSIGN EQ NEQ LT GT LTE GTE AND OR NOT
+%token ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT ASSIGNMOD ASSIGNDIV INC DEC EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT COLON
 %token IDENT NUM ERR
 %token SYSTEM OUT PRINTLN
 %token TRY CATCH FINALLY
-%token IF WHILE FOR SWITCH CASE DEFAULT ELSE
+%token IF WHILE FOR SWITCH CASE DEFAULT ELSE BREAK
 %start program
 
 /* %left ELSE */
-%left ASSIGN
+%left ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT ASSIGNMOD ASSIGNDIV
 %left OR
 %left AND
 %left EQ NEQ
@@ -41,9 +41,8 @@ char* str;
 %left MULTIPLY DIVIDE MOD
 %right NOT
 %right UMINUS
-/* %right LBRACE RBRACE  // Priorité à droite pour les accolades */
+%nonassoc INC DEC
 %%
-/* si je decide de remettre list_import je dois mettre un nouveau axiome (program) */
 
 program:
     class_declaration_list
@@ -159,9 +158,13 @@ assignment:
     ;
 
 assignment_statement:
-    array_access ASSIGN expression
-    | qualified_access ASSIGN expression
-    | simple_access ASSIGN expression
+    array_access assign_statement expression
+    | qualified_access assign_statement expression
+    | simple_access assign_statement expression
+;
+
+assign_statement:
+    ASSIGN | ASSIGNPLUS | ASSIGNMINUS | ASSIGNMULT | ASSIGNMOD | ASSIGNDIV
 ;
 
 variables_declaration:
@@ -202,6 +205,7 @@ block_statement:
     | while_statement
     | for_statement
     | foreach_statement
+    | switch_statement
 ;
 
 statement:
@@ -262,6 +266,7 @@ arg_type:
 
 if_statement:
     IF LPAREN expression RPAREN LBRACE RBRACE               /* if sans else */
+    | IF LPAREN expression RPAREN block_statement               /* if sans else */
     //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE block_body_sequence                /* if avec simple else */
     //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE if_statement               /* if avec "else if" (chainable) */
     | IF LPAREN expression RPAREN LBRACE block_body_sequence RBRACE               /* if sans else */
@@ -272,11 +277,13 @@ if_statement:
 while_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
     WHILE LPAREN expression RPAREN LBRACE block_body_sequence RBRACE
     | WHILE LPAREN expression RPAREN LBRACE RBRACE
+    | WHILE LPAREN expression RPAREN block_statement
 ;
 
 for_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
       FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE block_body_sequence RBRACE
       | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE RBRACE
+      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN block_statement
 ;
 
 for_init:
@@ -298,7 +305,33 @@ foreach_statement:
     | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
     | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
     | FOR LPAREN array_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
+    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN block_statement
+    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN block_statement
+    | FOR LPAREN array_type IDENT COLON IDENT RPAREN block_statement
 ;
+
+switch_statement:
+      SWITCH LPAREN expression RPAREN LBRACE case_clauses default_clause_opt RBRACE
+    ;
+
+case_clauses:
+      /* Vide */
+    | case_clauses case_clause
+    ;
+
+case_clause:
+      CASE expression COLON block_body_sequence break_opt
+    ;
+
+break_opt:
+    // vide
+    | BREAK SEMICOLON
+;
+
+    default_clause_opt:
+      /* Vide */
+    | DEFAULT COLON block_body_sequence
+    ;
 
 
 /* if_statement:
@@ -345,8 +378,6 @@ expression:
     | expression GTE simple_expression
     | expression AND simple_expression
     | expression OR simple_expression
-    | array_access
-    | method_call
     | MINUS expression %prec UMINUS
     | simple_expression
 ;
@@ -356,7 +387,21 @@ simple_expression:
     NOT simple_expression
     | LPAREN expression RPAREN
     | qualified_access        // obj.meth
+    | qualified_access INC       // obj.meth
+    | INC qualified_access       // obj.meth
+    | qualified_access DEC       // obj.meth
+    | DEC qualified_access       // obj.meth
+    | simple_access INC
+    | simple_access DEC
+    | INC simple_access
+    | DEC simple_access
     | simple_access
+    | array_access
+    | INC array_access
+    | DEC array_access
+    | array_access INC
+    | array_access DEC
+    | method_call
     | NUM
     | STRING_LITERAL
     ;
