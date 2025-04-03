@@ -89,7 +89,10 @@
      SYSTEM = 305,
      OUT = 306,
      PRINTLN = 307,
-     UMINUS = 308
+     TRY = 308,
+     CATCH = 309,
+     FINALLY = 310,
+     UMINUS = 311
    };
 #endif
 
@@ -108,7 +111,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 112 "parse.tab.h"
+#line 115 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

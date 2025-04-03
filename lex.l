@@ -32,6 +32,9 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "this"         { return THIS; }
 "return"       { return RETURN; }
 "void"         { return VOID; }
+"try"         { return TRY; }
+"catch"         { return CATCH; }
+"finally"         { return FINALLY; }
 
 
 "="   { return ASSIGN; }

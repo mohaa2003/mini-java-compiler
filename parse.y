@@ -27,6 +27,7 @@ char* str;
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT
 %token IDENT NUM ERR
 %token SYSTEM OUT PRINTLN
+%token TRY CATCH FINALLY
 %start program
 
 /* %left ELSE */
@@ -196,6 +197,7 @@ block_statement:
     print_statement SEMICOLON
     | method_call SEMICOLON    
     | return_statement SEMICOLON
+    | exception_statement
     /* | if_statement
     | while_statement
     | for_statement */
@@ -368,6 +370,39 @@ simple_access:
 array_indices:
     LBRACKET expression RBRACKET
     | array_indices LBRACKET expression RBRACKET
+    ;
+
+    //ECEPTIONS
+
+exception_statement:
+    TRY LBRACE block_body_sequence RBRACE catch_clauses finally_clause_opt
+    | TRY LBRACE block_body_sequence RBRACE finally_clause            /* Permet try ... finally sans catch */
+    |TRY LBRACE RBRACE catch_clauses finally_clause_opt   //sans corps !
+    | TRY LBRACE RBRACE finally_clause            /* Permet try ... finally sans catch */
+    ;
+
+catch_clauses:
+    catch_clause
+    | catch_clauses catch_clause
+;
+
+catch_clause:
+      CATCH LPAREN exception_declaration RPAREN LBRACE block_body_sequence RBRACE
+      | CATCH LPAREN exception_declaration RPAREN LBRACE RBRACE
+    ;
+
+exception_declaration:
+      type_abstract IDENT
+    ;
+
+finally_clause:
+      FINALLY LBRACE block_body_sequence RBRACE
+      | FINALLY LBRACE RBRACE
+    ;
+
+finally_clause_opt:
+      /* Vide */
+    | finally_clause
     ;
 
 %%
