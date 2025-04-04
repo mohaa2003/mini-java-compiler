@@ -39,6 +39,7 @@ char* str;
 %left LT GT LTE GTE
 %left PLUS MINUS
 %left MULTIPLY DIVIDE MOD
+%left CAST
 %right NOT
 %right UMINUS
 %nonassoc INC DEC
@@ -161,6 +162,7 @@ assignment_statement:
     array_access assign_statement expression
     | qualified_access assign_statement expression
     | simple_access assign_statement expression
+    | inc_dec_statement
 ;
 
 assign_statement:
@@ -382,6 +384,8 @@ expression:
     | expression AND simple_expression
     | expression OR simple_expression
     | MINUS expression %prec UMINUS
+    | LPAREN premitive_type RPAREN expression %prec CAST
+    | LPAREN array_type RPAREN expression %prec CAST  //pas le casting de type abstract psq y a pas de abstraction ou heritage
     | simple_expression
 ;
 
@@ -390,7 +394,16 @@ simple_expression:
     NOT simple_expression
     | LPAREN expression RPAREN
     | qualified_access        // obj.meth
-    | qualified_access INC       // obj.meth
+    | simple_access
+    | array_access
+    | inc_dec_statement
+    | method_call
+    | NUM
+    | STRING_LITERAL
+    ;
+
+inc_dec_statement:
+    qualified_access INC       // obj.meth
     | INC qualified_access       // obj.meth
     | qualified_access DEC       // obj.meth
     | DEC qualified_access       // obj.meth
@@ -398,16 +411,11 @@ simple_expression:
     | simple_access DEC
     | INC simple_access
     | DEC simple_access
-    | simple_access
-    | array_access
     | INC array_access
     | DEC array_access
     | array_access INC
     | array_access DEC
-    | method_call
-    | NUM
-    | STRING_LITERAL
-    ;
+;
 
 premitive_type:
     INT | FLOAT | BOOLEAN | CHAR | DOUBLE | STRING | LONG | SHORT

@@ -109,7 +109,8 @@
      DEFAULT = 325,
      ELSE = 326,
      BREAK = 327,
-     UMINUS = 328
+     CAST = 328,
+     UMINUS = 329
    };
 #endif
 
@@ -128,7 +129,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 132 "parse.tab.h"
+#line 133 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
