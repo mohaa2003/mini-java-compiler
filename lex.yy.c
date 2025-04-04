@@ -282,31 +282,31 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	*yy_cp = '\0'; \
 	yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 74
-#define YY_END_OF_BUFFER 75
+#define YY_NUM_RULES 75
+#define YY_END_OF_BUFFER 76
 static yyconst short int yy_accept[201] =
     {   0,
-        0,    0,   75,   73,   67,   66,   46,   73,   51,   73,
-       73,   52,   53,   49,   47,   61,   48,   62,   50,   69,
-       60,   59,   40,   30,   41,   68,   68,   56,   57,   68,
-       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   68,   68,   54,   73,   55,   39,    0,   72,
+        0,    0,   76,   74,   68,   67,   46,   74,   51,   74,
+       74,   52,   53,   49,   47,   61,   48,   62,   50,   70,
+       60,   59,   40,   30,   41,   69,   69,   56,   57,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   54,   74,   55,   39,    0,   73,
         0,   34,   44,    0,    0,   33,   36,   31,   37,   32,
-        0,   70,   35,   69,   42,   38,   43,   68,   68,   68,
-       58,   68,   68,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   22,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   68,   68,   68,   68,   68,   45,    0,    0,
+        0,   71,   35,   70,   42,   38,   43,   69,   69,   69,
+       58,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   22,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   45,    0,    0,
 
-       70,   68,   68,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   68,   68,   25,    7,   68,   15,   64,   68,
-       68,   68,   68,   68,   68,   68,   68,   19,   68,   68,
-        0,   71,   68,   68,   68,   68,   27,   68,    2,   68,
-       68,   68,   23,   68,   68,    8,   68,   68,   68,   68,
-       68,   68,   68,   68,   16,   18,   68,    0,    0,   68,
-       68,   68,   29,   20,    3,   68,   68,    4,    6,   68,
-       68,   68,   68,   68,   12,   68,   68,   24,   14,   63,
-       68,   68,    5,   68,   68,   68,   68,   11,   17,   13,
-       26,    1,   28,   21,   65,    9,   68,   68,   10,    0
+       71,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   25,    7,   69,   15,   64,   69,
+       69,   69,   69,   69,   69,   69,   69,   19,   69,   69,
+        0,   72,   69,   69,   69,   69,   27,   69,    2,   69,
+       69,   69,   23,   69,   69,    8,   69,   69,   69,   69,
+       69,   69,   69,   69,   16,   18,   69,    0,    0,   69,
+       69,   69,   29,   20,    3,   69,   69,    4,    6,   66,
+       69,   69,   69,   69,   12,   69,   69,   24,   14,   63,
+       69,   69,    5,   69,   69,   69,   69,   11,   17,   13,
+       26,    1,   28,   21,   65,    9,   69,   69,   10,    0
 
     } ;
 
@@ -1059,52 +1059,57 @@ YY_RULE_SETUP
 case 66:
 YY_RULE_SETUP
 #line 84 "lex.l"
-{ nb_ligne ++; }
+{ return PRINT; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
 #line 85 "lex.l"
-{ /* Ignorer les espaces */ }
+{ nb_ligne ++; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
 #line 86 "lex.l"
-{ return IDENT; }
+{ /* Ignorer les espaces */ }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
 #line 87 "lex.l"
-{ return NUM; }
+{ return IDENT; }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
 #line 88 "lex.l"
-{ /* Ignorer les commentaires */ }
+{ return NUM; }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
 #line 89 "lex.l"
-{ /* Ignorer les commentaires multilignes */ }
+{ /* Ignorer les commentaires */ }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
 #line 90 "lex.l"
-{ return STRING_LITERAL; }
+{ /* Ignorer les commentaires multilignes */ }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 92 "lex.l"
+#line 91 "lex.l"
+{ return STRING_LITERAL; }
+	YY_BREAK
+case 74:
+YY_RULE_SETUP
+#line 93 "lex.l"
 {
      printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);
      return ERR;
   }
 	YY_BREAK
-case 74:
+case 75:
 YY_RULE_SETUP
-#line 97 "lex.l"
+#line 98 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1108 "lex.yy.c"
+#line 1113 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1990,4 +1995,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 97 "lex.l"
+#line 98 "lex.l"

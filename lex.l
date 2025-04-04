@@ -81,6 +81,7 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "System"               { return SYSTEM; }
 "out"                  { return OUT; }
 "println"              { return PRINTLN; }
+"print"              { return PRINT; }
 "\n"                   { nb_ligne ++; }
 [ \t]           { /* Ignorer les espaces */ }
 {IDENTIFIER}           { return IDENT; }

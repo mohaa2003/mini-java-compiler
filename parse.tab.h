@@ -97,18 +97,19 @@
      SYSTEM = 313,
      OUT = 314,
      PRINTLN = 315,
-     TRY = 316,
-     CATCH = 317,
-     FINALLY = 318,
-     IF = 319,
-     WHILE = 320,
-     FOR = 321,
-     SWITCH = 322,
-     CASE = 323,
-     DEFAULT = 324,
-     ELSE = 325,
-     BREAK = 326,
-     UMINUS = 327
+     PRINT = 316,
+     TRY = 317,
+     CATCH = 318,
+     FINALLY = 319,
+     IF = 320,
+     WHILE = 321,
+     FOR = 322,
+     SWITCH = 323,
+     CASE = 324,
+     DEFAULT = 325,
+     ELSE = 326,
+     BREAK = 327,
+     UMINUS = 328
    };
 #endif
 
@@ -127,7 +128,7 @@ char* str;
 
 
 /* Line 1676 of yacc.c  */
-#line 131 "parse.tab.h"
+#line 132 "parse.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
