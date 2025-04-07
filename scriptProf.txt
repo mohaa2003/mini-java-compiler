@@ -29,10 +29,9 @@ class Person {
     void checkEligibility() {
         if (age >= 18) {
             System.out.println("Eligible for voting.");
-        } else if(1) {
+        } else {
             System.out.println("Not eligible for voting.");
         }
-        else{}
     }
 
     // Méthode qui retourne la moyenne des notes

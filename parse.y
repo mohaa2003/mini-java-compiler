@@ -273,12 +273,12 @@ arg_type:
 //THIS WHAT I DID
 
 if_statement:
-        IF LPAREN expression RPAREN if_body %prec LOWER_THAN_ELSE
-        | IF LPAREN expression RPAREN if_body ELSE else_body       
-        | IF LPAREN expression RPAREN if_body ELSE if_statement
+        IF LPAREN expression RPAREN control_body %prec LOWER_THAN_ELSE
+        | IF LPAREN expression RPAREN control_body ELSE else_body       
+        | IF LPAREN expression RPAREN control_body ELSE if_statement
     ;
 
-if_body:
+control_body:   //utilise pour traite tous les cas d'un corps d'une instructions de boucle ou des conditions
     LBRACE RBRACE
     | LBRACE block_body_sequence RBRACE       /* cas du bloc if (qui peut être vide ou non) */
     | assignment_statement SEMICOLON         /* cas d'une instruction simple sans accolades */
@@ -290,7 +290,7 @@ else_body:
     LBRACE RBRACE
     | LBRACE block_body_sequence RBRACE     /* cas du bloc else (qui peut être vide ou non) */
     | assignment_statement SEMICOLON       /* cas d'une instruction simple sans accolades */
-    | block_statement_without_if                      /* cas d'un statement déjà défini (qui n'est pas un if) */
+    | block_statement_without_if                    /* cas d'un statement déjà défini (qui n'est pas un if) */
 ;
 
 
@@ -307,17 +307,11 @@ block_statement_without_if:
 
 
 while_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
-    WHILE LPAREN expression RPAREN LBRACE block_body_sequence RBRACE
-    | WHILE LPAREN expression RPAREN LBRACE RBRACE
-    | WHILE LPAREN expression RPAREN block_statement
-    | WHILE LPAREN expression RPAREN assignment_statement SEMICOLON
+    WHILE LPAREN expression RPAREN control_body
 ;
 
 for_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
-      FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE block_body_sequence RBRACE
-      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE RBRACE
-      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN block_statement
-      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN assignment_statement SEMICOLON
+      FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN control_body
 ;
 
 for_init:
@@ -333,18 +327,9 @@ for_update:
 
 /* --- foreach statement --- */
 foreach_statement:
-    FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE RBRACE
-    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE RBRACE
-    | FOR LPAREN array_type IDENT COLON IDENT RPAREN LBRACE RBRACE
-    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
-    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
-    | FOR LPAREN array_type IDENT COLON IDENT RPAREN LBRACE block_body_sequence RBRACE
-    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN block_statement
-    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN block_statement
-    | FOR LPAREN array_type IDENT COLON IDENT RPAREN block_statement
-    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
-    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
-    | FOR LPAREN array_type IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
+    FOR LPAREN premitive_type IDENT COLON IDENT RPAREN control_body
+    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN control_body
+    | FOR LPAREN array_type IDENT COLON IDENT RPAREN control_body
 ;
 
 switch_statement:
@@ -481,7 +466,7 @@ array_indices:
     | array_indices LBRACKET expression RBRACKET
     ;
 
-    //ECEPTIONS
+    //EXCEPTIONS
 
 exception_statement:
     TRY LBRACE block_body_sequence RBRACE catch_clauses finally_clause_opt
