@@ -31,7 +31,8 @@ char* str;
 %token IF WHILE FOR SWITCH CASE DEFAULT ELSE BREAK
 %start program
 
-/* %left ELSE */
+%nonassoc LOWER_THAN_ELSE
+%right ELSE
 %left ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT ASSIGNMOD ASSIGNDIV
 %left OR
 %left AND
@@ -268,27 +269,55 @@ arg_type:
 ;
 
 //------------------------------------ LES BOUCLES ET LES BLOCKS DE CONTROLES ---------------------------------
+//IN JAVA IT'S IMPOSSIBLE TO ALLOW ONLY A DECLARATION STATEMENT INSIDE AN IF OR A WHILE ... OUTSIDE THE BLOCK !
+//THIS WHAT I DID
 
 if_statement:
-    IF LPAREN expression RPAREN LBRACE RBRACE               /* if sans else */
-    | IF LPAREN expression RPAREN block_statement               /* if sans else */
-    //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE block_body_sequence                /* if avec simple else */
-    //| IF LPAREN expression RPAREN LBRACE RBRACE ELSE if_statement               /* if avec "else if" (chainable) */
-    | IF LPAREN expression RPAREN LBRACE block_body_sequence RBRACE               /* if sans else */
-    //| IF LPAREN expression RPAREN LBRACE RBRACE block_body_sequence ELSE statement                /* if avec simple else */
-    //| IF LPAREN expression RPAREN LBRACE RBRACE block_body_sequence ELSE if_statement               /* if avec "else if" (chainable) */
+        IF LPAREN expression RPAREN if_body %prec LOWER_THAN_ELSE
+        | IF LPAREN expression RPAREN if_body ELSE else_body       
+        | IF LPAREN expression RPAREN if_body ELSE if_statement
     ;
+
+if_body:
+    LBRACE RBRACE
+    | LBRACE block_body_sequence RBRACE       /* cas du bloc if (qui peut être vide ou non) */
+    | assignment_statement SEMICOLON         /* cas d'une instruction simple sans accolades */
+    | block_statement                        /* cas d'un statement déjà défini (qui n'est pas un if) */
+;
+
+
+else_body:
+    LBRACE RBRACE
+    | LBRACE block_body_sequence RBRACE     /* cas du bloc else (qui peut être vide ou non) */
+    | assignment_statement SEMICOLON       /* cas d'une instruction simple sans accolades */
+    | block_statement_without_if                      /* cas d'un statement déjà défini (qui n'est pas un if) */
+;
+
+
+block_statement_without_if:
+    print_statement SEMICOLON
+    | method_call SEMICOLON    
+    | return_statement SEMICOLON
+    | exception_statement
+    | while_statement
+    | for_statement
+    | foreach_statement
+    | switch_statement                       /* cas d'un statement déjà défini (qui n'est pas un if) */
+;
+
 
 while_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
     WHILE LPAREN expression RPAREN LBRACE block_body_sequence RBRACE
     | WHILE LPAREN expression RPAREN LBRACE RBRACE
     | WHILE LPAREN expression RPAREN block_statement
+    | WHILE LPAREN expression RPAREN assignment_statement SEMICOLON
 ;
 
 for_statement:  //l'expressionn est obligatoire , initialise la a 1 si elle est boucle infinie
       FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE block_body_sequence RBRACE
       | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE RBRACE
       | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN block_statement
+      | FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN assignment_statement SEMICOLON
 ;
 
 for_init:
@@ -313,6 +342,9 @@ foreach_statement:
     | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN block_statement
     | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN block_statement
     | FOR LPAREN array_type IDENT COLON IDENT RPAREN block_statement
+    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
+    | FOR LPAREN type_abstract IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
+    | FOR LPAREN array_type IDENT COLON IDENT RPAREN assignment_statement SEMICOLON
 ;
 
 switch_statement:
@@ -338,29 +370,6 @@ break_opt:
     | DEFAULT COLON block_body_sequence
     ;
 
-
-/* if_statement:
-    IF LPAREN expression RPAREN LBRACE statement_list RBRACE optional_else
-    ; */
-
-/* optional_else: 
-    | ELSE LBRACE statement_list RBRACE  
-    ; 
-    */
-
-/* while_statement:
-    WHILE LPAREN expression RPAREN LBRACE statement_list RBRACE
-    ;
-
-for_statement:
-    FOR LPAREN variable_declaration_for SEMICOLON expression SEMICOLON assignment RPAREN LBRACE statement_list RBRACE
-    | foreach_statement
-    ;
-
-foreach_statement:
-    FOR LPAREN type_abstract IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
-    | FOR LPAREN premitive_type IDENT COLON IDENT RPAREN LBRACE statement_list RBRACE
-    ; */
 
 return_statement:   //si a l'interieur d'une fonction il doit etre la valeur de retour de cette fonction
                     //si n'est pas dans une fonction alors il act comme un exit()
