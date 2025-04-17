@@ -76,7 +76,7 @@ void pop_scope() {
 bool check_access(Symbol *sym, Scope *context) {
     if (sym->access == ACC_PUBLIC) return true;
     if (sym->access == ACC_PRIVATE) {
-        return (context == sym->scope_level);  // Même scope seulement
+        return (context->scope_level == sym->scope_level);  // Même scope seulement
     }
     // Pour PROTECTED: ajoutez la logique d'héritage si nécessaire
     return false;

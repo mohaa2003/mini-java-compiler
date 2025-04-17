@@ -1073,12 +1073,12 @@ YY_RULE_SETUP
 case 69:
 YY_RULE_SETUP
 #line 86 "lex.l"
-{ return IDENT; }
+{ yylval.str = strdup(yytext); return IDENT; }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
 #line 87 "lex.l"
-{ return NUM; }
+{ yylval.integer = atoi(yytext); return NUM; }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
@@ -1093,7 +1093,7 @@ YY_RULE_SETUP
 case 73:
 YY_RULE_SETUP
 #line 90 "lex.l"
-{ return STRING_LITERAL; }
+{ yylval.str = strdup(yytext); return STRING_LITERAL; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
