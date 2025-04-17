@@ -1,6 +1,5 @@
 %{
 #include "parse.tab.h"
-#include "ts.h"
 extern nb_ligne;
 extern YYSTYPE yylval;
 %}
@@ -84,11 +83,11 @@ MULTILINE_COMMENT "/*"[^*]*"*"+([^*/][^*]*"*"+)*"/"
 "print"              { return PRINT; }
 "\n"                   { nb_ligne ++; }
 [ \t]           { /* Ignorer les espaces */ }
-{IDENTIFIER}           { return IDENT; }
-{NUMBER}               { return NUM; }
+{IDENTIFIER}           { yylval.str = strdup(yytext); return IDENT; }
+{NUMBER}               { yylval.integer = atoi(yytext); return NUM; }
 {COMMENT}              { /* Ignorer les commentaires */ }
 {MULTILINE_COMMENT}    { /* Ignorer les commentaires multilignes */ }
-{STRING_LITERAL}       { return STRING_LITERAL; }
+{STRING_LITERAL}       { yylval.str = strdup(yytext); return STRING_LITERAL; }
 
 . {
      printf("Erreur lexicale à la ligne %d : %s\n", nb_ligne,yytext);

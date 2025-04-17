@@ -122,7 +122,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 13 "parse.y"
+#line 11 "parse.y"
 
 int integer;
 char* str;

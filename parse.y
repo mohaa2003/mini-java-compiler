@@ -1,10 +1,8 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include "ts.h"
-    elt_idf_cst ts_idf_cst[1000];
-    elt_kw_sep ts_kw[50], ts_sep[50];
-    int count_idf_cst = 0, count_kw = 0, count_sep = 0;
+    #include "symbols.h"
+
     extern char *yytext;  // Dernier token lu par Flex
 
     int nb_ligne = 1;
@@ -23,9 +21,12 @@ char* str;
 %token INT STRING LONG PRIVATE PROTECTED VOID
 %token PUBLIC SHORT RETURN NEW THIS STATIC
 %token ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT ASSIGNMOD ASSIGNDIV INC DEC EQ NEQ LT GT LTE GTE AND OR NOT
-%token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
+%token PLUS MINUS MULTIPLY DIVIDE MOD 
+%token <str>STRING_LITERAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT COLON
-%token IDENT NUM ERR
+%token <str>IDENT
+%token <integer>NUM 
+%token ERR
 %token SYSTEM OUT PRINTLN PRINT
 %token TRY CATCH FINALLY
 %token IF WHILE FOR SWITCH CASE DEFAULT ELSE BREAK
