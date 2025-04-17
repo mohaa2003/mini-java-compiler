@@ -16,10 +16,18 @@ typedef struct {
     char code[20];
 } elt_kw_sep;
 
+extern elt_idf_cst ts_idf_cst[1000];
+extern elt_kw_sep ts_kw[50], ts_sep[50];
+
+
 // Déclaration des fonctions SEULEMENT
 int search(char entity[], int t);
 int insert(char entity[], char code[], char type[], float value, int t);
 void print(void);
+int check_declaration(char entity[]);
+void inserttype(char entity[], char type[]);
+int updateType(char entity[] , char type[]);
 // ... autres prototypes
+
 
 #endif

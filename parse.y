@@ -2,30 +2,30 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "ts.h"
-    elt_idf_cst ts_idf_cst[1000];
-    elt_kw_sep ts_kw[50], ts_sep[50];
-    int count_idf_cst = 0, count_kw = 0, count_sep = 0;
+    int yylex(void);
+    void yyerror(const char *msg);
     extern char *yytext;  // Dernier token lu par Flex
 
     int nb_ligne = 1;
 %}
 
-%union{
-int integer;
-char* str;
+%union {
+    int integer;         // Pour int, boolean, etc.
+    float floating;      // Pour float
+    double doubleval;    // Pour double
+    char charval;        // Pour char
+    char* str;           // Pour identifiants, String literals
 }
 
-
-
 /* Déclaration des tokens (correspond à lex.l) */
-%token BOOLEAN CHAR CLASS
-%token DOUBLE FLOAT FINAL
-%token INT STRING LONG PRIVATE PROTECTED VOID
+%token BOOLEAN <charval>CHAR CLASS
+%token <doubleval>DOUBLE <floating>FLOAT FINAL
+%token <integer>INT <str>STRING LONG PRIVATE PROTECTED VOID
 %token PUBLIC SHORT RETURN NEW THIS STATIC
 %token ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT ASSIGNMOD ASSIGNDIV INC DEC EQ NEQ LT GT LTE GTE AND OR NOT
 %token PLUS MINUS MULTIPLY DIVIDE MOD STRING_LITERAL
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET ARRAYBRACKETS SEMICOLON COMMA DOT COLON
-%token IDENT NUM ERR
+%token <str>IDENT <integer>NUM ERR
 %token SYSTEM OUT PRINTLN PRINT
 %token TRY CATCH FINALLY
 %token IF WHILE FOR SWITCH CASE DEFAULT ELSE BREAK
@@ -180,10 +180,6 @@ constantes_declaration:
     FINAL type_abstract constantes_init
     | FINAL premitive_type constantes_init
     ;
-
-/* variable_declaration_for:
-    premitive_type variable_init                  //mal compris !
-    ; */
 
 variables_init:
     variables_init COMMA variable_init
@@ -367,7 +363,7 @@ expression:
     expression PLUS simple_expression
     | expression MINUS simple_expression
     | expression MULTIPLY simple_expression
-    | expression DIVIDE simple_expression
+    | expression DIVIDE simple_expression 
     | expression MOD simple_expression
     | expression EQ simple_expression
     | expression NEQ simple_expression
@@ -423,8 +419,6 @@ array_type:
 type_abstract:
     IDENT
 ;
-
-
 
 array_declaration:
     array_type IDENT /* Déclaration sans initialisation */
@@ -505,13 +499,11 @@ int main() {
     if (yyparse() == 0) {
         printf("Syntaxe correcte !\n");
     }
+    print();
     return 0;
 }
-int yywrap()
-{
-    return 1;
-}
-int yyerror(char *msg)
+
+void yyerror(const char *msg)
 { 
     printf("Erreur syntaxique à la ligne %d : %s\n", nb_ligne,yytext);
     exit(1);
